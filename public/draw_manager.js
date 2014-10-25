@@ -2,6 +2,26 @@
 function draw_manager(canvas) {
 	var state = {};
 
+	this.drawPaths = function(paths) {
+		console.log(paths);
+		for(var i = 0; i < paths.length; i++) {
+			var path = paths[i].path;
+			var context = canvas[0].getContext('2d');
+			console.log(path);
+
+			context.strokeStyle = '#000000';
+			context.lineJoin = "round";
+			context.lineWidth = 5;
+
+			context.beginPath();
+			context.moveTo(path[0].x, path[0].y);
+			for(var j = 1; j < path.length; j++) {
+				context.lineTo(path[j].x, path[j].y);
+			}
+			context.stroke();
+		}
+	}
+
 	this.newManager = function(id) {
 		state[id] = {
 			draw: new canvas_draw(canvas),

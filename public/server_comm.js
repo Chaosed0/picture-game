@@ -9,6 +9,9 @@ function server_comm(base_address, draw_manager) {
 		var data = message.data;
 		var obj = JSON && JSON.parse(data) || $.parseJSON(json);
 		switch (obj.m_type) {
+			case 'init_paths':
+				draw_manager.drawPaths(obj.paths);
+				break;
 			case 'join':
 				draw_manager.newManager(obj.id);
 				break;

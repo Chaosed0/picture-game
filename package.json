@@ -8,6 +8,7 @@
 	"dependencies" : {
 		"express"  : "~4.7.2",
 		"morgan"   : "~1.2.2",
-		"ws"       : "~0.4.32"
+		"ws"       : "~0.4.32",
+		"simplify-js" : "~1.2.1"
 	}
 }
