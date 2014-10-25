@@ -1,0 +1,13 @@
+
+{
+	"name"         : "picture-game",
+	"version"      : "0.0.0",
+	"description"  : "A game like Pictionary",
+	"main"         : "server.js",
+	"author"       : "elu",
+	"dependencies" : {
+		"express"  : "~4.7.2",
+		"morgan"   : "~1.2.2",
+		"ws"       : "~0.4.32"
+	}
+}
