@@ -3,11 +3,9 @@ function draw_manager(canvas) {
 	var state = {};
 
 	this.drawPaths = function(paths) {
-		console.log(paths);
 		for(var i = 0; i < paths.length; i++) {
 			var path = paths[i].path;
 			var context = canvas[0].getContext('2d');
-			console.log(path);
 
 			context.strokeStyle = '#000000';
 			context.lineJoin = "round";
