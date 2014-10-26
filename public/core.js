@@ -17,9 +17,9 @@ $(document).ready(function() {
 	var brushManager = new BrushManager(canvas);
 	var comms;
 	if(offline) {
-		comms = new ServerComms('ws://127.0.0.1:8080/', brushManager);
-	} else {
 		comms = new NullComms();
+	} else {
+		comms = new ServerComms('ws://127.0.0.1:8080/', brushManager);
 	}
 	var localBrush = new LocalBrush(comms, canvas);
 });
