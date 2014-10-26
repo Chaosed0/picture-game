@@ -10,17 +10,42 @@
 	<script type="text/javascript" src="NullComms.js"></script>
 	<script type="text/javascript" src="core.js"></script>
 
+	<style>
+		html {
+			height:100%;
+		}
+
+		body {
+			height:100%;
+		}
+
+		#main_container {
+			height:100%;
+		}
+
+		#controls {
+			width:20%;
+			height:100%;
+			float:left;
+		}
+
+		#canvas_container {
+			width:80%;
+			height:100%;
+			float:right;
+		}
+	</style>
+
 	<title>Canvas test</title>
 </head>
 <body>
-	<table style='width:100%; height:100%; top:0; left:0; right:0; bottom:0; position: absolute;'>
-		<tr>
-			<td style='width: 20%; height: 100%;'>
-			</td>
-			<td style='width: 80%; height: 100%;'>
-				<canvas id='thecanvas' style='width:100%; height:100%'/>
-			</td>
-		</tr>
-	</table>
+	<div id='main_container'>
+		<div id='controls'>
+			<p>left panel</p>
+		</div>
+		<div id='canvas_container'>
+			<canvas id='thecanvas' style='width:100%; height:100%'/>
+		</div>
+	</div>
 </body>
 </html>
