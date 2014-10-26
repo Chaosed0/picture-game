@@ -39,22 +39,39 @@
 			height: 100%;
 		}
 
-		#controls {
+		#sidebar {
 			background-color: #778899;
-			padding-top: 30px;
 		}
 
 		#thecanvas {
 			background-color: #DDDDDD;
+		}
+
+		#chatbox {
+			background-color: #DDDDDD;
+		}
+
+		#controls {
+			padding: 10px;
+			padding-top: 30px;
+			margin-left: auto;
+			margin-right:auto;
 		}
 	</style>
 </head>
 <body>
 	<div class='container-fluid fill'>
 		<div class='row fill'>
-			<div class='col-md-2 fill' id='controls'>
-				<input class='slider' id='sizeslider'>
-				<input type='text' id='colorpicker'/>
+			<div class='col-md-2 fill' id='sidebar'>
+				<div id='controls'>
+					<input class='slider' id='sizeslider'/>
+					<input type='text' id='colorpicker'/>
+				</div>
+				<div id='chat'>
+					<div id='chattext'></div>
+					<input type='text' id='chatinput'/>
+					<input type='button' id='chatsend' value='send'/>
+				</div>
 			</div>
 			<div class='col-md-10 fill' id='draw_area'>
 				<canvas id='thecanvas'/>
