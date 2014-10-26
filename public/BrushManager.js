@@ -17,8 +17,9 @@ function BrushManager(canvas) {
 			var context = canvas[0].getContext('2d');
 
 			context.strokeStyle = paths[i].color;
-			context.lineWidth = paths[i].size;
 			context.lineJoin = 'round';
+			context.lineCap = 'round';
+			context.lineWidth = paths[i].size;
 
 			context.beginPath();
 			context.moveTo(path[0].x, path[0].y);

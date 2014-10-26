@@ -4,6 +4,7 @@ function Brush(canvas) {
 	var context = canvas[0].getContext('2d');
 	var strokeStyle = '#000000';
 	var lineJoin = 'round';
+	var lineCap = 'round';
 	var lineWidth = 5;
 
 	var painting = false;
@@ -23,7 +24,8 @@ function Brush(canvas) {
 			curPath.push(pos);
 
 			context.strokeStyle = strokeStyle;
-			context.lineJoin = 'round';
+			context.lineJoin = lineJoin;
+			context.lineCap = lineCap;
 			context.lineWidth = lineWidth;
 
 			context.beginPath();
