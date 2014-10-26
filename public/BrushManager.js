@@ -4,6 +4,9 @@ function BrushManager(canvas) {
 	var brushes = {};
 	var paths = [];
 
+	this.setSize = function(id, size) { brushes[id].setSize(size); };
+	this.setColor = function(id, color) { brushes[id].setColor(color); };
+
 	this.initPaths = function(init_paths) {
 		paths = init_paths;
 	};
@@ -14,8 +17,8 @@ function BrushManager(canvas) {
 			var context = canvas[0].getContext('2d');
 
 			context.strokeStyle = paths[i].color;
-			context.lineWidth = paths[i].width;
-			context.lineJoin = "round";
+			context.lineWidth = paths[i].size;
+			context.lineJoin = 'round';
 
 			context.beginPath();
 			context.moveTo(path[0].x, path[0].y);

@@ -40,6 +40,21 @@ function ServerComms(baseAddress, drawManager) {
 		var data = JSON.stringify(obj);
 		ws.send(data);
 	}
+
+	this.setColor = function(color) {
+		send({
+			m_type: 'ch_color',
+			color: color
+		});
+	};
+
+	this.setSize = function(size) {
+		send({
+			m_type: 'ch_size',
+			size: size
+		});
+	}
+
 	this.startDraw = function(pos) {
 		send({
 			m_type: 'start',

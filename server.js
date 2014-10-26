@@ -35,7 +35,6 @@ wss.on('connection', function(ws) {
 	var conn_obj = {
 		id: id,
 		m_type: 'join',
-		draw_style: {}
 	};
 	broadcast(JSON.stringify(conn_obj));
 
@@ -49,6 +48,8 @@ wss.on('connection', function(ws) {
 
 	//Add the new connection
 	conns[id] = {
+		color: '#000000',
+		size: 5,
 		lastPos: { x: 0, y:0 },
 		painting: false,
 		conn: ws
@@ -60,6 +61,12 @@ wss.on('connection', function(ws) {
 	ws.on('message', function(message) {
 		var obj = JSON.parse(message);
 		switch(obj.m_type) {
+			case 'ch_size':
+				conns[id].size = obj.size;
+				break;
+			case 'ch_color':
+				conns[id].color = obj.color;
+				break;
 			case 'start':
 				broadcast(JSON.stringify({id: id, m_type: 'start', pos: obj.pos}), id);
 				conns[id].lastPos = obj.pos;
@@ -69,20 +76,30 @@ wss.on('connection', function(ws) {
 					console.log("warning: adding path that already exists");
 				}
 				curPath = paths.length;
-				paths.push({ path: [obj.pos], width: 5, color: '#000000'});
+				paths.push({ path: [obj.pos],
+					size: conns[id].size,
+					color: conns[id].color});
 				break;
 			case 'update':
-				broadcast(JSON.stringify({id: id, m_type: 'update', pos: obj.pos}), id);
-				conns[id].lastPos = obj.pos;
+				if(curPath >= 0) {
+					broadcast(JSON.stringify({id: id, m_type: 'update', pos: obj.pos}), id);
+					conns[id].lastPos = obj.pos;
 
-				paths[curPath].path.push(obj.pos);
+					paths[curPath].path.push(obj.pos);
+				} else {
+					console.log('warning: \'update\' received before \'stop\'');
+				}
 				break;
 			case 'stop':
-				broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
-				conns[id].painting = false;
+				if(curPath >= 0) {
+					broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
+					conns[id].painting = false;
 
-				paths[curPath].path = simplify(paths[curPath].path, 2.0);
-				curPath = -1;
+					paths[curPath].path = simplify(paths[curPath].path, 1.0);
+					curPath = -1;
+				} else {
+					console.log('warning: \'stop\' received before \'stop\'');
+				}
 				break;
 		}
 	});

@@ -5,7 +5,18 @@ function LocalBrush(comms, canvas, brushManager) {
 	var id = -1;
 	var painting = false;
 
+	//init
 	brushManager.newBrush(id);
+
+	this.setSize = function(size) {
+		brushManager.setSize(id, size);
+		comms.setSize(size);
+	};
+
+	this.setColor = function(color) {
+		brushManager.setColor(id, color);
+		comms.setColor(color);
+	};
 
 	canvas.mousedown(function(e) {
 		painting = true;

@@ -20,4 +20,10 @@ $(document).ready(function() {
 	}
 	canvas.ready(sizeCanvas);
 	$(window).resize(sizeCanvas);
+
+	$('#subsize').click(function() {
+		var size = parseInt($('#size_in').val());
+		console.log(size);
+		localBrush.setSize(size);
+	});
 });

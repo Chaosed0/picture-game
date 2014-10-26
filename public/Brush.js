@@ -41,7 +41,7 @@ function Brush(canvas) {
 		var obj = {
 			path: simplify(curPath, 1.0),
 			color: strokeStyle,
-			width: lineWidth
+			size: lineWidth
 		}
 		return obj;
 	}
