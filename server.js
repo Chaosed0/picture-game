@@ -58,7 +58,9 @@ wss.on('connection', function(ws) {
 	};
 
 	//Send all the paths
-	ws.send(JSON.stringify({ m_type: 'init_paths', paths: paths }));
+	if(paths.length > 0) {
+		ws.send(JSON.stringify({ m_type: 'init_paths', paths: paths }));
+	}
 
 	ws.on('message', function(message) {
 		var obj = JSON.parse(message);
