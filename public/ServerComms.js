@@ -36,32 +36,27 @@ function ServerComms(baseAddress, drawManager) {
 		}
 	};
 
-	this.startDraw = function(pos) {
-		var obj = {
-			m_type: 'start',
-			pos: pos
-		};
-
+	var send = function(obj) {
 		var data = JSON.stringify(obj);
 		ws.send(data);
+	}
+	this.startDraw = function(pos) {
+		send({
+			m_type: 'start',
+			pos: pos
+		});
 	};
 
 	this.endDraw = function() {
-		var obj = {
+		send({
 			m_type: 'stop'
-		};
-
-		var data = JSON.stringify(obj);
-		ws.send(data);
+		});
 	};
 
 	this.updateDraw = function(pos) {
-		var obj = {
+		send({
 			m_type: 'update',
 			pos: pos
-		};
-
-		var data = JSON.stringify(obj);
-		ws.send(data);
+		});
 	};
 }
