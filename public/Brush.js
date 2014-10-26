@@ -39,7 +39,7 @@ function Brush(canvas) {
 	this.endDraw = function() {
 		painting = false;
 		var obj = {
-			path: simplify(curPath, 2.0),
+			path: simplify(curPath, 1.0),
 			color: strokeStyle,
 			width: lineWidth
 		}
