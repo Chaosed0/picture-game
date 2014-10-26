@@ -21,6 +21,13 @@ $(document).ready(function() {
 	canvas.ready(sizeCanvas);
 	$(window).resize(sizeCanvas);
 
+	$('#colorpicker').spectrum({
+		color: '#000',
+		change: function(color) {
+			localBrush.setColor(color.toHexString());
+		}
+	});
+
 	$('#subsize').click(function() {
 		var size = parseInt($('#size_in').val());
 		console.log(size);
