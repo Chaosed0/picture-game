@@ -42,6 +42,8 @@ wss.on('connection', function(ws) {
 	for(var i in conns) {
 		if(i != id) {
 			conn_obj.id = i;
+			conn_obj.color = conns[i].color;
+			conn_obj.size = conns[i].size;
 			ws.send(JSON.stringify(conn_obj));
 		}
 	}
@@ -63,11 +65,17 @@ wss.on('connection', function(ws) {
 		switch(obj.m_type) {
 			case 'ch_size':
 				conns[id].size = obj.size;
+				obj.id = id;
+				broadcast(JSON.stringify(obj), id);
 				break;
 			case 'ch_color':
 				conns[id].color = obj.color;
+				obj.id = id;
+				broadcast(JSON.stringify(obj), id);
 				break;
 			case 'start':
+				var color = conns[id].color;
+				var size = conns[id].size;
 				broadcast(JSON.stringify({id: id, m_type: 'start', pos: obj.pos}), id);
 				conns[id].lastPos = obj.pos;
 				conns[id].painting = true;

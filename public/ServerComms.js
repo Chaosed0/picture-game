@@ -14,8 +14,16 @@ function ServerComms(baseAddress, drawManager) {
 				drawManager.initPaths(obj.paths);
 				drawManager.redraw();
 				break;
+			case 'ch_color':
+				drawManager.setColor(obj.id, obj.color);
+				break;
+			case 'ch_size':
+				drawManager.setSize(obj.id, obj.size);
+				break;
 			case 'join':
 				drawManager.newBrush(obj.id);
+				if(obj.size != undefined) drawManager.setSize(obj.id, obj.size);
+				if(obj.color != undefined) drawManager.setColor(obj.id, obj.color);
 				break;
 			case 'leave':
 				drawManager.destroyBrush(obj.id);
