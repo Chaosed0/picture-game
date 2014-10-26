@@ -5,7 +5,8 @@ $(document).ready(function() {
 
 	function sizeCanvas() {
 		canvas[0].width = canvas.parent().width();
-		canvas[0].height = canvas.parent().height();
+		//XXX: Hacking around weird scrollbar issue, probably won't hold up
+		canvas[0].height = canvas.parent().height() - 5;
 	}
 	canvas.ready(sizeCanvas);
 	$(window).resize(sizeCanvas);
