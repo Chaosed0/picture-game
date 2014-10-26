@@ -3,10 +3,12 @@ $(document).ready(function() {
 	var canvas = $('#thecanvas');
 	var offline = true;
 
-	canvas.ready(function() {
-		canvas[0].width = canvas.width();
-		canvas[0].height = canvas.height();
-	});
+	function sizeCanvas() {
+		canvas[0].width = canvas.parent().width();
+		canvas[0].height = canvas.parent().height();
+	}
+	canvas.ready(sizeCanvas);
+	$(window).resize(sizeCanvas);
 
 	var brush = new Brush(canvas);
 	brush.drawLine({x:0,y:0},{x:100,y:100});
