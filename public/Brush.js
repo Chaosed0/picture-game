@@ -6,17 +6,45 @@ function Brush(canvas) {
 	var lineJoin = 'round';
 	var lineWidth = 5;
 
-	this.drawLine = function(from, to) {
-		context.strokeStyle = strokeStyle;
-		context.lineJoin = "round";
-		context.lineWidth = lineWidth;
+	var painting = false;
+	var lastPos = {x: 0, y: 0};
 
-		context.beginPath();
-		context.moveTo(from.x, from.y);
-		context.lineTo(to.x, to.y);
-		context.closePath();
-		context.stroke();
+	var curPath = null;
+
+	this.startDraw = function(pos) {
+		curPath = [ pos ];
+
+		lastPos = pos;
+		painting = true;
+	}
+
+	this.updateDraw = function(pos) {
+		if(painting) {
+			curPath.push(pos);
+
+			context.strokeStyle = strokeStyle;
+			context.lineJoin = "round";
+			context.lineWidth = lineWidth;
+
+			context.beginPath();
+			context.moveTo(lastPos.x, lastPos.y);
+			context.lineTo(pos.x, pos.y);
+			context.closePath();
+			context.stroke();
+
+			lastPos = pos;
+		}
 	};
+
+	this.endDraw = function() {
+		painting = false;
+		var obj = {
+			path: simplify(curPath, 2.0),
+			color: strokeStyle,
+			width: lineWidth
+		}
+		return obj;
+	}
 
 	this.setColor = function(color) {
 		strokeStyle = color;

@@ -1,7 +1,7 @@
 
 //Handles communication with the server.
-function ServerComms(base_address, draw_manager) {
-	var ws = new WebSocket(base_address);
+function ServerComms(baseAddress, drawManager) {
+	var ws = new WebSocket(baseAddress);
 
 	ws.onopen = function(anevent) {
 	};
@@ -11,22 +11,23 @@ function ServerComms(base_address, draw_manager) {
 		var obj = JSON && JSON.parse(data) || $.parseJSON(json);
 		switch (obj.m_type) {
 			case 'init_paths':
-				draw_manager.drawPaths(obj.paths);
+				drawManager.initPaths(obj.paths);
+				drawManager.redraw();
 				break;
 			case 'join':
-				draw_manager.newManager(obj.id);
+				drawManager.newBrush(obj.id);
 				break;
 			case 'leave':
-				draw_manager.destroyManager(obj.id);
+				drawManager.destroyBrush(obj.id);
 				break;
 			case 'start':
-				draw_manager.startDraw(obj.id, obj.pos);
+				drawManager.startDraw(obj.id, obj.pos);
 				break;
 			case 'stop':
-				draw_manager.stopDraw(obj.id);
+				drawManager.endDraw(obj.id);
 				break;
 			case 'update':
-				draw_manager.updateDraw(obj.id, obj.pos);
+				drawManager.updateDraw(obj.id, obj.pos);
 				break;
 			default:
 				console.log('warning: unknown message from server');

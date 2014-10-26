@@ -1,16 +1,21 @@
 
 //Manages different painters (brushes).
 function BrushManager(canvas) {
-	var state = {};
+	var brushes = {};
+	var paths = [];
 
-	this.drawPaths = function(paths) {
+	this.initPaths = function(init_paths) {
+		paths = init_paths;
+	};
+
+	this.redraw = function() {
 		for(var i = 0; i < paths.length; i++) {
 			var path = paths[i].path;
 			var context = canvas[0].getContext('2d');
 
-			context.strokeStyle = '#000000';
+			context.strokeStyle = paths[i].color;
+			context.lineWidth = paths[i].width;
 			context.lineJoin = "round";
-			context.lineWidth = 5;
 
 			context.beginPath();
 			context.moveTo(path[0].x, path[0].y);
@@ -19,37 +24,31 @@ function BrushManager(canvas) {
 			}
 			context.stroke();
 		}
-	}
-
-	this.newManager = function(id) {
-		state[id] = {
-			draw: new Brush(canvas),
-			lastPos: { x: 0, y: 0 },
-			painting: false
-		};
 	};
 
-	this.destroyManager = function(id) {
-		delete state[id];
+	this.newBrush = function(id) {
+		brushes[id] = new Brush(canvas);
+	};
+
+	this.destroyBrush = function(id) {
+		delete brushes[id];
 	};
 
 	this.startDraw = function(id, pos) {
-		if (id in state) {
-			state[id].lastPos = pos;
-			state[id].painting = true;
+		if (id in brushes) {
+			brushes[id].startDraw(pos);
 		}
 	};
 
-	this.stopDraw = function(id, pos) {
-		if (id in state) {
-			state[id].painting = false;
+	this.endDraw = function(id, pos) {
+		if (id in brushes) {
+			paths.push(brushes[id].endDraw());
 		}
 	};
 
 	this.updateDraw = function(id, pos) {
-		if (id in state && state[id].painting) {
-			state[id].draw.drawLine(state[id].lastPos, pos);
-			state[id].lastPos = pos;
+		if (id in brushes) {
+			brushes[id].updateDraw(pos);
 		}
 	};
 }

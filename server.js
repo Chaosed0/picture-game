@@ -69,7 +69,7 @@ wss.on('connection', function(ws) {
 					console.log("warning: adding path that already exists");
 				}
 				curPath = paths.length;
-				paths.push({ path: [obj.pos] });
+				paths.push({ path: [obj.pos], width: 5, color: '#000000'});
 				break;
 			case 'update':
 				broadcast(JSON.stringify({id: id, m_type: 'update', pos: obj.pos}), id);

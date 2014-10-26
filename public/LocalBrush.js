@@ -1,32 +1,34 @@
 
 //Listens for events and paints on the canvas.
-function LocalBrush(comms, canvas) {
-	var brush = new Brush(canvas);
-	var lastMouse = { x: 0, y: 0 };
+function LocalBrush(comms, canvas, brushManager) {
+	//negative IDs should not be assigned from server
+	var id = -1;
 	var painting = false;
 
+	brushManager.newBrush(id);
+
 	canvas.mousedown(function(e) {
-		var bounds = this.getBoundingClientRect();
 		painting = true;
-		lastMouse.x = e.pageX - bounds.left;
-		lastMouse.y = e.pageY - bounds.top;
-		comms.startDraw(lastMouse);
+		var bounds = this.getBoundingClientRect();
+		var pos = { x: e.pageX - bounds.left,
+			y: e.pageY - bounds.top };
+		brushManager.startDraw(id, pos);
+		comms.startDraw(pos);
 	});
 
 	canvas.mousemove(function(e) {
 		if(painting) {
 			var bounds = this.getBoundingClientRect();
-			var nowMouse = { x: e.pageX - bounds.left,
+			var pos = { x: e.pageX - bounds.left,
 				y: e.pageY - bounds.top };
 
-			brush.drawLine(lastMouse, nowMouse);
-			comms.updateDraw(nowMouse);
-
-			lastMouse = nowMouse;
+			brushManager.updateDraw(id, pos);
+			comms.updateDraw(pos);
 		}
 	});
 
 	canvas.mouseup(function(e) {
+		brushManager.endDraw(id);
 		comms.endDraw();
 		painting = false;
 	});
