@@ -28,9 +28,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#subsize').click(function() {
-		var size = parseInt($('#size_in').val());
-		console.log(size);
-		localBrush.setSize(size);
+	$('input.slider').slider({
+		min: 1,
+		max: 30,
+		value: 5
+	});
+	$('#sizeslider').on('slideStop', function() {
+		localBrush.setSize(this.value);
 	});
 });

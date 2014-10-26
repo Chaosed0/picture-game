@@ -11,10 +11,12 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="css/spectrum.css">
+	<link rel="stylesheet" href="css/bootstrap-slider.css">
 
 	<script type="text/javascript" src="lib/simplify.js"></script>
 	<script type="text/javascript" src="lib/jquery-2.1.1.js"></script>
 	<script type="text/javascript" src="lib/spectrum.js"></script>
+	<script type="text/javascript" src="lib/bootstrap-slider.js"></script>
 
 	<script type="text/javascript" src="Brush.js"></script>
 	<script type="text/javascript" src="BrushManager.js"></script>
@@ -39,6 +41,7 @@
 
 		#controls {
 			background-color: #778899;
+			padding-top: 30px;
 		}
 
 		#thecanvas {
@@ -50,8 +53,7 @@
 	<div class='container-fluid fill'>
 		<div class='row fill'>
 			<div class='col-md-2 fill' id='controls'>
-				<input type='text' id='size_in'/>
-				<input type='button' id='subsize' value='size'/>
+				<input class='slider' id='sizeslider'>
 				<input type='text' id='colorpicker'/>
 			</div>
 			<div class='col-md-10 fill' id='draw_area'>
