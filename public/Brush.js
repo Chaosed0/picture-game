@@ -23,7 +23,7 @@ function Brush(canvas) {
 			curPath.push(pos);
 
 			context.strokeStyle = strokeStyle;
-			context.lineJoin = "round";
+			context.lineJoin = 'round';
 			context.lineWidth = lineWidth;
 
 			context.beginPath();
