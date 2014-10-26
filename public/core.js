@@ -1,11 +1,22 @@
 
 $(document).ready(function() {
 	var canvas = $('#thecanvas');
-	canvas[0].width = window.innerWidth;
-	canvas[0].height = window.innerHeight;
+	var offline = true;
 
-	draw_man = new draw_manager(canvas);
-	draw = new canvas_draw(canvas);
-	comm = new server_comm('ws://127.0.0.1:8080/', draw_man);
-	local = new local_draw(comm, draw);
+	canvas.ready(function() {
+		canvas[0].width = canvas.width();
+		canvas[0].height = canvas.height();
+	});
+
+	var brush = new Brush(canvas);
+	brush.drawLine({x:0,y:0},{x:100,y:100});
+
+	var brushManager = new BrushManager(canvas);
+	var comms;
+	if(offline) {
+		comms = new ServerComms('ws://127.0.0.1:8080/', brushManager);
+	} else {
+		comms = new NullComms();
+	}
+	var localBrush = new LocalBrush(comms, canvas);
 });

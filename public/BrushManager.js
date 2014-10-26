@@ -1,5 +1,6 @@
 
-function draw_manager(canvas) {
+//Manages different painters (brushes).
+function BrushManager(canvas) {
 	var state = {};
 
 	this.drawPaths = function(paths) {
@@ -22,7 +23,7 @@ function draw_manager(canvas) {
 
 	this.newManager = function(id) {
 		state[id] = {
-			draw: new canvas_draw(canvas),
+			draw: new Brush(canvas),
 			lastPos: { x: 0, y: 0 },
 			painting: false
 		};

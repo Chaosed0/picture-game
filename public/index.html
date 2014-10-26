@@ -3,17 +3,24 @@
 <html>
 <head>
 	<script type="text/javascript" src="lib/jquery-2.1.1.js"></script>
-	<script type="text/javascript" src="canvas_draw.js"></script>
-	<script type="text/javascript" src="draw_manager.js"></script>
-	<script type="text/javascript" src="local_draw.js"></script>
-	<script type="text/javascript" src="server_comm.js"></script>
+	<script type="text/javascript" src="Brush.js"></script>
+	<script type="text/javascript" src="BrushManager.js"></script>
+	<script type="text/javascript" src="LocalBrush.js"></script>
+	<script type="text/javascript" src="ServerComms.js"></script>
+	<script type="text/javascript" src="NullComms.js"></script>
 	<script type="text/javascript" src="core.js"></script>
 
 	<title>Canvas test</title>
 </head>
 <body>
-	<div>
-		<canvas id='thecanvas' style='width:100%; height:100%;'/>
-	</div>
+	<table style='width:100%; height:100%; top:0; left:0; right:0; bottom:0; position: absolute;'>
+		<tr>
+			<td style='width: 20%; height: 100%;'>
+			</td>
+			<td style='width: 80%; height: 100%;'>
+				<canvas id='thecanvas' style='width:100%; height:100%'/>
+			</td>
+		</tr>
+	</table>
 </body>
 </html>

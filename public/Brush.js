@@ -1,5 +1,6 @@
 
-function canvas_draw(canvas) {
+//Paints lines, stores brush attributes.
+function Brush(canvas) {
 	var context = canvas[0].getContext('2d');
 	var strokeStyle = '#000000';
 	var lineJoin = 'round';
@@ -24,8 +25,4 @@ function canvas_draw(canvas) {
 	this.setSize = function(size) {
 		lineWidth = size;
 	};
-
-	this.mousedown = function(cb) { canvas.mousedown(cb); };
-	this.mousemove = function(cb) { canvas.mousemove(cb); };
-	this.mouseup = function(cb) { canvas.mouseup(cb); };
 }

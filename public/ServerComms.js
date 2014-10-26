@@ -1,5 +1,6 @@
 
-function server_comm(base_address, draw_manager) {
+//Handles communication with the server.
+function ServerComms(base_address, draw_manager) {
 	var ws = new WebSocket(base_address);
 
 	ws.onopen = function(anevent) {
