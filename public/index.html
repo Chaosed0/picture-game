@@ -24,24 +24,37 @@
 	<script type="text/javascript" src="core.js"></script>
 
 	<style>
-		html,body {
+		html {
 			height: 100%;
+		}
+
+		body {
+			height: 100%;
+			background-color: #556677;
 		}
 
 		.fill {
 			height: 100%;
+		}
+
+		#controls {
+			background-color: #778899;
+		}
+
+		#thecanvas {
+			background-color: #DDDDDD;
 		}
 	</style>
 </head>
 <body>
 	<div class='container-fluid fill'>
 		<div class='row fill'>
-			<div class='col-md-4 fill'>
+			<div class='col-md-2 fill' id='controls'>
 				<input type='text' id='size_in'/>
 				<input type='button' id='subsize' value='size'/>
 				<input type='text' id='colorpicker'/>
 			</div>
-			<div class='col-md-8 fill'>
+			<div class='col-md-10 fill' id='draw_area'>
 				<canvas id='thecanvas'/>
 			</div>
 		</div>
