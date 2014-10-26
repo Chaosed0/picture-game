@@ -101,15 +101,11 @@ wss.on('connection', function(ws) {
 				}
 				break;
 			case 'stop':
-				if(curPath >= 0) {
-					broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
-					conns[id].painting = false;
+				broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
+				conns[id].painting = false;
 
-					paths[curPath].path = simplify(paths[curPath].path, 1.0);
-					curPath = -1;
-				} else {
-					console.log('warning: \'stop\' received before \'stop\'');
-				}
+				paths[curPath].path = simplify(paths[curPath].path, 1.0);
+				curPath = -1;
 				break;
 		}
 	});
