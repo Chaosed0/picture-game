@@ -41,35 +41,58 @@
 
 		#sidebar {
 			background-color: #778899;
+			padding: 75px 10px 60px 10px;
 		}
 
 		#thecanvas {
 			background-color: #DDDDDD;
-			display:block;
+			vertical-align: top;
 		}
 
 		#chatbox {
 			background-color: #DDDDDD;
 		}
 
-		#controls {
-			padding: 10px;
+		#draw_controls {
+			width: 100%;
+			box-sizing: border-box;
+			position:fixed;
+			top: 0;
 			padding-top: 30px;
-			margin-left: auto;
-			margin-right:auto;
+			height: 75px;
 		}
+
+		#chattext {
+			padding: 5px;
+			width:100%;
+			height: 100%;
+			box-sizing: border-box;
+			background-color: #DDDDDD;
+		}
+
+		#chat_controls {
+			width: 100%;
+			box-sizing: border-box;
+			position: fixed;
+			bottom: 0;
+			padding-top: 10px;
+			height: 60px;
+		}
+
 	</style>
 </head>
 <body>
 	<div class='container-fluid fill'>
 		<div class='row fill'>
 			<div class='col-md-2 fill' id='sidebar'>
-				<div id='controls'>
-					<input class='slider' id='sizeslider'/>
-					<input type='text' id='colorpicker'/>
+				<div id='draw_controls'>
+					<input class='slider left' id='sizeslider'/>
+					<input type='text' class='right' id='colorpicker'/>
 				</div>
-				<div id='chat'>
-					<div id='chattext'></div>
+				<div id='chattext'>
+					<p>this chat is fake right now</p>
+				</div>
+				<div id='chat_controls'>
 					<input type='text' id='chatinput'/>
 					<input type='button' id='chatsend' value='send'/>
 				</div>
