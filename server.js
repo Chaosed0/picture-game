@@ -101,12 +101,15 @@ wss.on('connection', function(ws) {
 				}
 				break;
 			case 'stop':
-				broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
-				conns[id].painting = false;
+				if(paths[curPath].path.length > 1) {
+					//Ignore paths of 1, just a click, screws something up
+					broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
+					conns[id].painting = false;
 
-				paths[curPath].path = simplify(paths[curPath].path, 1.0);
-				curPath = -1;
-				break;
+					paths[curPath].path = simplify(paths[curPath].path, 1.0);
+					curPath = -1;
+					break;
+				}
 		}
 	});
 
