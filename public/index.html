@@ -8,15 +8,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" href="css/spectrum.css">
-	<link rel="stylesheet" href="css/bootstrap-slider.css">
+	<link rel="stylesheet" href="css/spectrum.css"/>
+	<link rel="stylesheet" href="css/jquery-ui.css"/>
 
 	<script type="text/javascript" src="lib/simplify.js"></script>
 	<script type="text/javascript" src="lib/jquery-2.1.1.js"></script>
+	<script type="text/javascript" src="lib/jquery-ui.js"></script>
 	<script type="text/javascript" src="lib/spectrum.js"></script>
-	<script type="text/javascript" src="lib/bootstrap-slider.js"></script>
 
 	<script type="text/javascript" src="Brush.js"></script>
 	<script type="text/javascript" src="BrushManager.js"></script>
@@ -32,72 +30,83 @@
 
 		body {
 			height: 100%;
-			background-color: #556677;
+			background-color: #778899;
+			margin: 0;
+		}
+
+		.container {
+		}
+
+		.container-row {
 		}
 
 		.fill {
 			height: 100%;
 		}
 
+		#toolbar {
+			text-align: center;
+			background-color: #223344;
+			width: 40px;
+			float: left;
+		}
+
+		#canvas_container {
+			margin-left: 40px;
+			margin-right: 300px;
+			line-height: 0;
+		}
+
 		#sidebar {
-			background-color: #778899;
-			padding: 75px 10px 60px 10px;
+			background-color: #DDDDDD;
+			width: 300px;
+			float: right;
+			line-height: 0;
 		}
 
 		#thecanvas {
-			background-color: #DDDDDD;
-			vertical-align: top;
+			background-color: #EEEEEE;
+			line-height: 0;
 		}
 
-		#chatbox {
-			background-color: #DDDDDD;
-		}
-
-		#draw_controls {
-			width: 100%;
-			box-sizing: border-box;
-			position:fixed;
-			top: 0;
-			padding-top: 30px;
-			height: 75px;
-		}
-
-		#chattext {
-			padding: 5px;
-			width:100%;
-			height: 100%;
-			box-sizing: border-box;
-			background-color: #DDDDDD;
-		}
-
-		#chat_controls {
-			width: 100%;
-			box-sizing: border-box;
-			position: fixed;
-			bottom: 0;
+		.control {
+			vertical-align: middle;
 			padding-top: 10px;
-			height: 60px;
+		}
+
+		.brush-circle {
+			background-color: #222;
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			border: 1px solid #EEE;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.slider_container {
+			background-color: #000;
+			width: 200px;
+			padding: 10px;
 		}
 
 	</style>
 </head>
 <body>
-	<div class='container-fluid fill'>
-		<div class='row fill'>
-			<div class='col-md-2 fill' id='sidebar'>
-				<div id='draw_controls'>
-					<input class='slider left' id='sizeslider'/>
-					<input type='text' class='right' id='colorpicker'/>
+	<div class='container fill'>
+		<div class='container-row fill'>
+			<div class='fill' id='toolbar'>
+				<div class='control'>
+					<input type='text' id='colorpicker'/>
 				</div>
-				<div id='chattext'>
-					<p>this chat is fake right now</p>
-				</div>
-				<div id='chat_controls'>
-					<input type='text' id='chatinput'/>
-					<input type='button' id='chatsend' value='send'/>
+				<div class='control'>
+					<div class='brush-circle' id='size_button'></div>
 				</div>
 			</div>
-			<div class='col-md-10 fill' id='draw_area'>
+			<div class='fill' id='sidebar'>
+				<p>nothing actually here</p>
+			</div>
+			<div class='fill' id='canvas_container'>
 				<canvas id='thecanvas'/>
 			</div>
 		</div>

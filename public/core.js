@@ -12,27 +12,53 @@ $(document).ready(function() {
 	}
 	var localBrush = new LocalBrush(comms, canvas, brushManager);
 
-	function sizeCanvas() {
+	var sizeCanvas = function() {
 		canvas[0].width = canvas.parent().width();
 		canvas[0].height = canvas.parent().height();
 		brushManager.redraw();
 	}
-	canvas.ready(sizeCanvas);
+	$(window).load(sizeCanvas);
 	$(window).resize(sizeCanvas);
 
 	$('#colorpicker').spectrum({
 		color: '#000',
+		showButtons: false,
+		showPaletteOnly: true,
+		togglePaletteOnly: true,
+		togglePaletteMoreText: '...',
+		togglePaletteLessText: '...',
 		change: function(color) {
 			localBrush.setColor(color.toHexString());
 		}
 	});
 
-	$('input.slider').slider({
+	var size_slider = $('<div></div>')
+	var slider_container = $('<div class="slider_container"></div>');
+	slider_container.hide();
+	slider_container.css('position', 'absolute');
+	slider_container.offset({ left: $('#toolbar').width(),
+		top: $('#size_button').position().top});
+	$('body').append(slider_container);
+	slider_container.append(size_slider);
+
+	size_slider.slider({
 		min: 1,
 		max: 30,
+		step: 1,
 		value: 5
 	});
-	$('#sizeslider').on('slideStop', function() {
-		localBrush.setSize(this.value);
+	
+	size_slider.on('slidestop', function(event, ui) {
+		localBrush.setSize(ui.value);
+	});
+
+	$('#size_button').mouseenter(function() {
+		$(this).width($(this).width() + 5);
+		$(this).height($(this).height() + 5);
+	}).mouseleave(function() {
+		$(this).width($(this).width() - 5);
+		$(this).height($(this).height() - 5);
+	}).click(function() {
+		slider_container.show();
 	});
 });
