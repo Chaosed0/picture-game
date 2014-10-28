@@ -49,7 +49,7 @@
 		#toolbar {
 			text-align: center;
 			background-color: #223344;
-			width: 45px;
+			width: 50px;
 			float: left;
 		}
 
@@ -72,8 +72,8 @@
 
 		.control {
 			margin: 5px;
-			width: 35px;
-			height: 35px;
+			width: 40px;
+			height: 40px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -89,9 +89,13 @@
 		}
 
 		.slider_container {
-			background-color: #000;
+			background-color: #112233;
 			width: 200px;
-			padding: 10px;
+			box-sizing: border-box;
+		}
+
+		.slider {
+			margin: 10px;
 		}
 
 	</style>
@@ -103,7 +107,7 @@
 				<div class='control'>
 					<input type='text' id='colorpicker'/>
 				</div>
-				<div class='control'>
+				<div class='control' id='size_button_container'>
 					<div class='brush-circle' id='size_button'></div>
 				</div>
 			</div>
