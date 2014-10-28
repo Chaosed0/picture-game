@@ -57,6 +57,7 @@ $(document).ready(function() {
 		$(this).width($(this).width() - 5);
 		$(this).height($(this).height() - 5);
 	}).click(function(event) {
+		event.stopPropagation();
 		slider_container.css({ 'left': $('#toolbar').width(),
 			'top': $('#size_button_container').position().top + $('#size_button_container').height() / 2 - slider_container.height() / 2});
 		slider_container.show();
