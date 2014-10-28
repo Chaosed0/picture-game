@@ -32,12 +32,10 @@ $(document).ready(function() {
 		}
 	});
 
-	var size_slider = $('<div></div>')
+	var size_slider = $('<div class="slider"></div>')
 	var slider_container = $('<div class="slider_container"></div>');
 	slider_container.hide();
 	slider_container.css('position', 'absolute');
-	slider_container.offset({ left: $('#toolbar').width(),
-		top: $('#size_button').position().top});
 	$('body').append(slider_container);
 	slider_container.append(size_slider);
 
@@ -58,7 +56,14 @@ $(document).ready(function() {
 	}).mouseleave(function() {
 		$(this).width($(this).width() - 5);
 		$(this).height($(this).height() - 5);
-	}).click(function() {
+	}).click(function(event) {
+		slider_container.css({ 'left': $('#toolbar').width(),
+			'top': $('#size_button_container').position().top + $('#size_button_container').height() / 2 - slider_container.height() / 2});
 		slider_container.show();
+		$(document).on('click', function(event) {
+			if (!$(event.target).closest('#menucontainer').length) {
+				slider_container.hide();
+			}
+		});
 	});
 });
