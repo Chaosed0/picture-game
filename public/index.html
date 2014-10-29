@@ -65,6 +65,8 @@
 			background-color: #223344;
 			width: 50px;
 			float: left;
+			display: flex;
+			flex-direction: column;
 		}
 
 		#canvas_container {
@@ -102,28 +104,40 @@
 			margin: auto;
 		}
 
+		.toolbar_filler {
+			flex: 1;
 		}
 
 
-		.brush, .brush_hover, .eraser, .eraser_hover {
+		.brush, .brush_hover, .eraser, .eraser_hover, .clear, .clear_hover {
 			width: 40px;
 			height: 40px;
+			background-image: url(img/icon_sprites.png);
+			background-repeat: no-repeat;
 		}
 
 		.brush {
-			background: url(img/brush-eraser.png) 0px 0px no-repeat;
+			background-position: 0px 0px;
 		}
 
 		.brush_hover {
-			background: url(img/brush-eraser.png) -40px 0px no-repeat;
+			background-position: -40px 0px;
 		}
 
 		.eraser {
-			background: url(img/brush-eraser.png) 0px -40px no-repeat;
+			background-position: 0px -40px;
 		}
 
 		.eraser_hover {
-			background: url(img/brush-eraser.png) -40px -40px no-repeat;
+			background-position: -40px -40px;
+		}
+
+		.clear {
+			background-position: 0px -80px;
+		}
+
+		.clear_hover {
+			background-position: -40px -80px;
 		}
 
 	</style>
@@ -141,6 +155,11 @@
 				<div class='control' id='brush_eraser_container'>
 					<div class='brush' id='brush_button'></div>
 				</div>
+				<div class='toolbar_filler'>
+				</div>
+				<div class='control' id='clear_button_container'>
+					<div class='clear' id = 'clear_button'></div>
+				</div>
 			</div>
 			<div class='fill' id='canvas_container'>
 				<canvas id='thecanvas'/>
@@ -149,6 +168,10 @@
 				<p>nothing actually here</p>
 			</div>
 		</div>
+	</div>
+
+	<div id='clear_canvas_dialog' title="Clear canvas">
+		<p>Are you sure you want to clear the canvas?</p>
 	</div>
 
 	<div id='slider_container'>

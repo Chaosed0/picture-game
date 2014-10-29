@@ -41,7 +41,23 @@ $(document).ready(function() {
 		step: 1,
 		value: 5
 	});
-	
+
+	var confirm_dialog = $('#clear_canvas_dialog')
+	confirm_dialog.dialog({
+		resizable: false,
+		height:140,
+		modal: true,
+		buttons: {
+			"Clear": function() {
+				drawManager.clearCanvas();
+				$(this).dialog('close');
+			},
+			Cancel: function() {
+				$(this).dialog('close');
+			}
+		}
+	}).dialog('close');
+
 	size_slider.on('slidestop', function(event, ui) {
 		localBrush.setSize(ui.value);
 	});
@@ -86,5 +102,15 @@ $(document).ready(function() {
 		} else {
 			$(this).addClass('eraser_hover');
 		}
+	});
+
+	$('#clear_button').mouseenter(function() {
+		$(this).removeClass();
+		$(this).addClass('clear_hover');
+	}).mouseleave(function() {
+		$(this).removeClass();
+		$(this).addClass('clear');
+	}).click(function(event) {
+		confirm_dialog.dialog('open');
 	});
 });
