@@ -18,6 +18,15 @@ function LocalBrush(comms, canvas, brushManager) {
 		comms.setColor(color);
 	};
 
+	this.toggleBrush = function() {
+		brushManager.toggleBrush(id);
+		comms.toggleBrush();
+	}
+
+	this.isBrush = function() {
+		return brushManager.isBrush(id);
+	}
+
 	canvas.mousedown(function(e) {
 		painting = true;
 		var bounds = this.getBoundingClientRect();

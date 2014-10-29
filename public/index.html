@@ -71,7 +71,7 @@
 		}
 
 		.control {
-			margin: 5px;
+			margin: 10px 5px;
 			width: 40px;
 			height: 40px;
 			display: flex;
@@ -81,8 +81,8 @@
 
 		.brush-circle {
 			background-color: #222;
-			width: 25px;
-			height: 25px;
+			width: 40px;
+			height: 40px;
 			border-radius: 50%;
 			border: 1px solid #EEE;
 			margin: auto;
@@ -98,6 +98,28 @@
 			margin: 10px;
 		}
 
+
+		.brush, .brush_hover, .eraser, .eraser_hover {
+			width: 40px;
+			height: 40px;
+		}
+
+		.brush {
+			background: url(img/brush-eraser.png) 0px 0px no-repeat;
+		}
+
+		.brush_hover {
+			background: url(img/brush-eraser.png) -40px 0px no-repeat;
+		}
+
+		.eraser {
+			background: url(img/brush-eraser.png) 0px -40px no-repeat;
+		}
+
+		.eraser_hover {
+			background: url(img/brush-eraser.png) -40px -40px no-repeat;
+		}
+
 	</style>
 </head>
 <body>
@@ -109,6 +131,9 @@
 				</div>
 				<div class='control' id='size_button_container'>
 					<div class='brush-circle' id='size_button'></div>
+				</div>
+				<div class='control' id='brush_eraser_container'>
+					<div class='brush' id='brush_button'></div>
 				</div>
 			</div>
 			<div class='fill' id='canvas_container'>

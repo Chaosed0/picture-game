@@ -52,6 +52,7 @@ wss.on('connection', function(ws) {
 	conns[id] = {
 		color: '#000000',
 		size: 5,
+		isBrush: true,
 		lastPos: { x: 0, y:0 },
 		painting: false,
 		conn: ws
@@ -74,6 +75,9 @@ wss.on('connection', function(ws) {
 				conns[id].color = obj.color;
 				obj.id = id;
 				broadcast(JSON.stringify(obj), id);
+				break;
+			case 'toggle_brush':
+				conns[id].isBrush = !conns[id].isBrush;
 				break;
 			case 'start':
 				var color = conns[id].color;
@@ -110,6 +114,11 @@ wss.on('connection', function(ws) {
 					curPath = -1;
 					break;
 				}
+				break;
+			default:
+				console.log('warning: got unknown message');
+				console.log(message);
+				break;
 		}
 	});
 

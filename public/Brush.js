@@ -6,6 +6,7 @@ function Brush(canvas) {
 	var lineJoin = 'round';
 	var lineCap = 'round';
 	var lineWidth = 5;
+	var isBrush = true;
 
 	var painting = false;
 	var lastPos = {x: 0, y: 0};
@@ -27,6 +28,7 @@ function Brush(canvas) {
 			context.lineJoin = lineJoin;
 			context.lineCap = lineCap;
 			context.lineWidth = lineWidth;
+			context.globalAlpha = (isBrush ? 1.0 : 0.0);
 
 			context.beginPath();
 			context.moveTo(lastPos.x, lastPos.y);
@@ -38,6 +40,14 @@ function Brush(canvas) {
 		}
 	};
 
+	this.toggleBrush = function() {
+		isBrush = !isBrush;
+	};
+
+	this.isBrush = function() {
+		return isBrush;
+	}
+
 	this.endDraw = function() {
 		painting = false;
 		var obj = {
@@ -46,7 +56,7 @@ function Brush(canvas) {
 			size: lineWidth
 		}
 		return obj;
-	}
+	};
 
 	this.setColor = function(color) {
 		strokeStyle = color;

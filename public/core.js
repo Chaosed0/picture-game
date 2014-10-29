@@ -51,11 +51,11 @@ $(document).ready(function() {
 	});
 
 	$('#size_button').mouseenter(function() {
-		$(this).width($(this).width() + 5);
-		$(this).height($(this).height() + 5);
-	}).mouseleave(function() {
 		$(this).width($(this).width() - 5);
 		$(this).height($(this).height() - 5);
+	}).mouseleave(function() {
+		$(this).width($(this).width() + 5);
+		$(this).height($(this).height() + 5);
 	}).click(function(event) {
 		event.stopPropagation();
 		slider_container.css({ 'left': $('#toolbar').width(),
@@ -66,5 +66,29 @@ $(document).ready(function() {
 				slider_container.hide();
 			}
 		});
+	});
+
+	$('#brush_button').mouseenter(function() {
+		$(this).removeClass();
+		if(localBrush.isBrush()) {
+			$(this).addClass('brush_hover');
+		} else {
+			$(this).addClass('eraser_hover');
+		}
+	}).mouseleave(function() {
+		$(this).removeClass();
+		if(localBrush.isBrush()) {
+			$(this).addClass('brush');
+		} else {
+			$(this).addClass('eraser');
+		}
+	}).click(function(event) {
+		$(this).removeClass();
+		localBrush.toggleBrush();
+		if(localBrush.isBrush()) {
+			$(this).addClass('brush_hover');
+		} else {
+			$(this).addClass('eraser_hover');
+		}
 	});
 });

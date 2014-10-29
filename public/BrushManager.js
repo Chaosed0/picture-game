@@ -6,6 +6,8 @@ function BrushManager(canvas) {
 
 	this.setSize = function(id, size) { brushes[id].setSize(size); };
 	this.setColor = function(id, color) { brushes[id].setColor(color); };
+	this.toggleBrush = function(id) { brushes[id].toggleBrush(); };
+	this.isBrush = function(id) { return brushes[id].isBrush(); };
 
 	this.initPaths = function(init_paths) {
 		paths = init_paths;

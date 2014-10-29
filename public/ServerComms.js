@@ -14,6 +14,8 @@ function ServerComms(baseAddress, drawManager) {
 				drawManager.initPaths(obj.paths);
 				drawManager.redraw();
 				break;
+			case 'toggle_brush':
+				drawManager.toggleBrush(obj.id);
 			case 'ch_color':
 				drawManager.setColor(obj.id, obj.color);
 				break;
@@ -55,6 +57,12 @@ function ServerComms(baseAddress, drawManager) {
 			color: color
 		});
 	};
+
+	this.toggleBrush = function() {
+		send({
+			m_type: 'toggle_brush'
+		});
+	}
 
 	this.setSize = function(size) {
 		send({
