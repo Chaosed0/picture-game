@@ -14,6 +14,9 @@ function ServerComms(baseAddress, drawManager) {
 				drawManager.initPaths(obj.paths);
 				drawManager.redraw();
 				break;
+			case 'clear':
+				drawManager.clearCanvas();
+				break;
 			case 'toggle_brush':
 				drawManager.toggleBrush(obj.id);
 				break;
@@ -91,4 +94,10 @@ function ServerComms(baseAddress, drawManager) {
 			pos: pos
 		});
 	};
+
+	this.clearCanvas = function() {
+		send({
+			m_type: 'clear'
+		});
+	}
 }

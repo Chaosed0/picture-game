@@ -23,6 +23,11 @@ function LocalBrush(comms, canvas, brushManager) {
 		comms.toggleBrush();
 	}
 
+	this.clearCanvas = function() {
+		brushManager.clearCanvas();
+		comms.clearCanvas();
+	};
+
 	this.isBrush = function() {
 		return brushManager.isBrush(id);
 	}

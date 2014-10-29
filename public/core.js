@@ -49,7 +49,7 @@ $(document).ready(function() {
 		modal: true,
 		buttons: {
 			"Clear": function() {
-				drawManager.clearCanvas();
+				localBrush.clearCanvas();
 				$(this).dialog('close');
 			},
 			Cancel: function() {

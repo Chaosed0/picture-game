@@ -81,6 +81,10 @@ wss.on('connection', function(ws) {
 				obj.id = id;
 				broadcast(JSON.stringify(obj), id);
 				break;
+			case 'clear':
+				paths = [];
+				broadcast(JSON.stringify(obj), id);
+				break;
 			case 'start':
 				var color = conns[id].color;
 				var size = conns[id].size;
