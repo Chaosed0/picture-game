@@ -2,16 +2,20 @@
 //Paints lines, stores brush attributes.
 function Brush(canvas) {
 	var context = canvas[0].getContext('2d');
-	var strokeStyle = '#000000';
-	var lineJoin = 'round';
-	var lineCap = 'round';
-	var lineWidth = 5;
+	var color = { r: 0, g: 0, b: 0 };
+	var join = 'round';
+	var cap = 'round';
+	var size = 5;
 	var isBrush = true;
 
 	var painting = false;
 	var lastPos = {x: 0, y: 0};
 
 	var curPath = null;
+
+	var colorAsStroke = function() {
+		return 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + 1.0 + ')';
+	};
 
 	this.startDraw = function(pos) {
 		curPath = [ pos ];
@@ -24,11 +28,11 @@ function Brush(canvas) {
 		if(painting) {
 			curPath.push(pos);
 
-			context.strokeStyle = strokeStyle;
-			context.lineJoin = lineJoin;
-			context.lineCap = lineCap;
-			context.lineWidth = lineWidth;
-			context.globalAlpha = (isBrush ? 1.0 : 0.0);
+			context.globalCompositeOperation = (isBrush ? 'source-over' : 'destination-out');
+			context.strokeStyle = colorAsStroke();
+			context.lineJoin = join;
+			context.lineCap = cap;
+			context.lineWidth = size;
 
 			context.beginPath();
 			context.moveTo(lastPos.x, lastPos.y);
@@ -44,6 +48,10 @@ function Brush(canvas) {
 		isBrush = !isBrush;
 	};
 
+	this.setBrush = function(in_isBrush) {
+		isBrush = in_isBrush;
+	};
+
 	this.isBrush = function() {
 		return isBrush;
 	}
@@ -52,17 +60,18 @@ function Brush(canvas) {
 		painting = false;
 		var obj = {
 			path: simplify(curPath, 1.0),
-			color: strokeStyle,
-			size: lineWidth
+			color: color,
+			size: size,
+			isBrush: isBrush
 		}
 		return obj;
 	};
 
-	this.setColor = function(color) {
-		strokeStyle = color;
+	this.setColor = function(in_color) {
+		color = in_color;
 	};
 
-	this.setSize = function(size) {
-		lineWidth = size;
+	this.setSize = function(in_size) {
+		size = in_size;
 	};
 }

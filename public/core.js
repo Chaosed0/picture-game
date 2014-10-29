@@ -28,7 +28,7 @@ $(document).ready(function() {
 		togglePaletteMoreText: '...',
 		togglePaletteLessText: '...',
 		change: function(color) {
-			localBrush.setColor(color.toHexString());
+			localBrush.setColor(color.toRgb());
 		}
 	});
 

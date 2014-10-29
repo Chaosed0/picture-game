@@ -16,6 +16,7 @@ function ServerComms(baseAddress, drawManager) {
 				break;
 			case 'toggle_brush':
 				drawManager.toggleBrush(obj.id);
+				break;
 			case 'ch_color':
 				drawManager.setColor(obj.id, obj.color);
 				break;

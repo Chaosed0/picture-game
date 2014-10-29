@@ -50,7 +50,7 @@ wss.on('connection', function(ws) {
 
 	//Add the new connection
 	conns[id] = {
-		color: '#000000',
+		color: { r: 0, g: 0, b: 0 },
 		size: 5,
 		isBrush: true,
 		lastPos: { x: 0, y:0 },
@@ -78,6 +78,8 @@ wss.on('connection', function(ws) {
 				break;
 			case 'toggle_brush':
 				conns[id].isBrush = !conns[id].isBrush;
+				obj.id = id;
+				broadcast(JSON.stringify(obj), id);
 				break;
 			case 'start':
 				var color = conns[id].color;
@@ -92,7 +94,9 @@ wss.on('connection', function(ws) {
 				curPath = paths.length;
 				paths.push({ path: [obj.pos],
 					size: conns[id].size,
-					color: conns[id].color});
+					color: conns[id].color,
+					isBrush: conns[id].isBrush
+				});
 				break;
 			case 'update':
 				if(curPath >= 0) {
@@ -110,7 +114,12 @@ wss.on('connection', function(ws) {
 					broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
 					conns[id].painting = false;
 
-					paths[curPath].path = simplify(paths[curPath].path, 1.0);
+					if(conns[id].isBrush) {
+						paths[curPath].path = simplify(paths[curPath].path, 1.0);
+					} else {
+						//Simplify eraser paths a bit more
+						paths[curPath].path = simplify(paths[curPath].path, 3.0);
+					}
 					curPath = -1;
 					break;
 				}

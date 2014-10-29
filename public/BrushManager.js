@@ -14,21 +14,19 @@ function BrushManager(canvas) {
 	};
 
 	this.redraw = function() {
+		var brush = new Brush(canvas);
 		for(var i = 0; i < paths.length; i++) {
 			var path = paths[i].path;
 			var context = canvas[0].getContext('2d');
+			brush.setColor(paths[i].color);
+			brush.setSize(paths[i].size);
+			brush.setBrush(paths[i].isBrush);
+			brush.startDraw(paths[0]);
 
-			context.strokeStyle = paths[i].color;
-			context.lineJoin = 'round';
-			context.lineCap = 'round';
-			context.lineWidth = paths[i].size;
-
-			context.beginPath();
-			context.moveTo(path[0].x, path[0].y);
 			for(var j = 1; j < path.length; j++) {
-				context.lineTo(path[j].x, path[j].y);
+				brush.updateDraw(path[j]);
 			}
-			context.stroke();
+			brush.endDraw();
 		}
 	};
 
