@@ -53,8 +53,10 @@ function LocalBrush(comms, canvas, brushManager) {
 	});
 
 	canvas.mouseup(function(e) {
-		brushManager.endDraw(id);
-		comms.endDraw();
-		painting = false;
+		if(painting) {
+			brushManager.endDraw(id);
+			comms.endDraw();
+			painting = false;
+		}
 	});
 }

@@ -109,11 +109,11 @@ wss.on('connection', function(ws) {
 
 					paths[curPath].path.push(obj.pos);
 				} else {
-					console.log('warning: \'update\' received before \'stop\'');
+					console.log('warning: \'update\' received before \'start\'');
 				}
 				break;
 			case 'stop':
-				if(paths[curPath].path.length > 1) {
+				if(curPath >= 0 && paths[curPath].path.length > 1) {
 					//Ignore paths of 1, just a click, screws something up
 					broadcast(JSON.stringify({id: id, m_type: 'stop'}), id);
 					conns[id].painting = false;
@@ -126,6 +126,8 @@ wss.on('connection', function(ws) {
 					}
 					curPath = -1;
 					break;
+				} else if(curPath < 0) {
+					console.log('warning: \'stop\' received before \'start\'');
 				}
 				break;
 			default:
