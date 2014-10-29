@@ -32,13 +32,9 @@ $(document).ready(function() {
 		}
 	});
 
-	var size_slider = $('<div class="slider"></div>')
-	var slider_container = $('<div class="slider_container"></div>');
+	var size_slider = $('#size_slider')
+	var slider_container = $('#slider_container');
 	slider_container.hide();
-	slider_container.css('position', 'absolute');
-	$('body').append(slider_container);
-	slider_container.append(size_slider);
-
 	size_slider.slider({
 		min: 1,
 		max: 30,

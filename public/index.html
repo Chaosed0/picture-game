@@ -46,6 +46,20 @@
 			height: 100%;
 		}
 
+		#slider_container {
+			position: absolute;
+			left: 0;
+			top: 0;
+			background-color: #112233;
+			width: 200px;
+			box-sizing: border-box;
+			z-index: 1000;
+		}
+
+		#size_slider {
+			margin: 10px;
+		}
+
 		#toolbar {
 			text-align: center;
 			background-color: #223344;
@@ -88,14 +102,6 @@
 			margin: auto;
 		}
 
-		.slider_container {
-			background-color: #112233;
-			width: 200px;
-			box-sizing: border-box;
-		}
-
-		.slider {
-			margin: 10px;
 		}
 
 
@@ -143,6 +149,10 @@
 				<p>nothing actually here</p>
 			</div>
 		</div>
+	</div>
+
+	<div id='slider_container'>
+		<div id='size_slider'></div>
 	</div>
 </body>
 </html>
