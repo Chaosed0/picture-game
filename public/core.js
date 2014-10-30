@@ -1,10 +1,11 @@
 
 $(document).ready(function() {
+	var server_address = 'ws://127.0.0.1:8080/'
 	var canvas = $('#thecanvas');
 	var offline = false;
 
 	var brushManager = new BrushManager(canvas);
-	var comms = new NullComms();
+	var comms = new ServerComms(server_address, brushManager);
 	var localBrush = new LocalBrush(comms, canvas, brushManager);
 
 	var sizeCanvas = function() {

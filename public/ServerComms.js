@@ -4,6 +4,14 @@ function ServerComms(baseAddress, drawManager) {
 	var ws = new WebSocket(baseAddress);
 
 	ws.onopen = function(anevent) {
+		send({
+			m_type: 'name',
+			name: 'a_person'
+		});
+		send({
+			m_type: 'join_room',
+			room_id: 'a_room'
+		});
 	};
 
 	ws.onmessage = function(message, flags) {
@@ -30,6 +38,7 @@ function ServerComms(baseAddress, drawManager) {
 				drawManager.newBrush(obj.id);
 				if(obj.size != undefined) drawManager.setSize(obj.id, obj.size);
 				if(obj.color != undefined) drawManager.setColor(obj.id, obj.color);
+				if(obj.isBrush != undefined) drawManager.setBrush(obj.id, obj.isBrush);
 				break;
 			case 'leave':
 				drawManager.destroyBrush(obj.id);

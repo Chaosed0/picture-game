@@ -7,6 +7,7 @@ function BrushManager(canvas) {
 	this.setSize = function(id, size) { brushes[id].setSize(size); };
 	this.setColor = function(id, color) { brushes[id].setColor(color); };
 	this.toggleBrush = function(id) { brushes[id].toggleBrush(); };
+	this.setBrush = function(id, isBrush) { brushes[id].setBrush(isBrush); };
 	this.isBrush = function(id) { return brushes[id].isBrush(); };
 
 	this.clearCanvas = function() {
