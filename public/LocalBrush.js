@@ -52,11 +52,14 @@ function LocalBrush(comms, canvas, brushManager) {
 		}
 	});
 
-	canvas.mouseup(function(e) {
+	var endDraw = function(e) {
 		if(painting) {
 			brushManager.endDraw(id);
 			comms.endDraw();
 			painting = false;
 		}
-	});
+	}
+
+	canvas.mouseup(endDraw);
+	canvas.mouseout(endDraw);
 }
