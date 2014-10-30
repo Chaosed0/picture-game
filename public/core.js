@@ -45,8 +45,8 @@ $(document).ready(function() {
 	var confirm_dialog = $('#clear_canvas_dialog')
 	confirm_dialog.dialog({
 		resizable: false,
-		height:140,
 		modal: true,
+		autoOpen: false,
 		buttons: {
 			"Clear": function() {
 				localBrush.clearCanvas();
@@ -56,7 +56,7 @@ $(document).ready(function() {
 				$(this).dialog('close');
 			}
 		}
-	}).dialog('close');
+	})
 
 	size_slider.on('slidestop', function(event, ui) {
 		localBrush.setSize(ui.value);
