@@ -1,9 +1,13 @@
 
 //Null, for when we just want a local canvas.
 function NullComms() {
-	this.startDraw = function(pos) { };
+	var nullFunc = function() { };
 
-	this.endDraw = function() { };
-
-	this.updateDraw = function(pos) { };
+	this.setColor = nullFunc;
+	this.toggleBrush = nullFunc;
+	this.setSize = nullFunc;
+	this.startDraw = nullFunc;
+	this.endDraw = nullFunc;
+	this.updateDraw = nullFunc;
+	this.clearCanvas = nullFunc;
 }

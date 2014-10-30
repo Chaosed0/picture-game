@@ -4,12 +4,7 @@ $(document).ready(function() {
 	var offline = false;
 
 	var brushManager = new BrushManager(canvas);
-	var comms;
-	if(offline) {
-		comms = new NullComms();
-	} else {
-		comms = new ServerComms('ws://127.0.0.1:8080/', brushManager);
-	}
+	var comms = new NullComms();
 	var localBrush = new LocalBrush(comms, canvas, brushManager);
 
 	var sizeCanvas = function() {
