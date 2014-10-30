@@ -101,7 +101,19 @@ function Room() {
 				users[id].toggleBrush();
 				break;
 			case 'clear':
-				paths = [];
+				var newpaths = [];
+
+				//Re-start paths that were in-progress at time of clear
+				for(var uid in pathMap) {
+					var state = users[uid].getState();
+					var path = paths[pathMap[uid]];
+					state.path = [ path[path.length-1] ];
+					pathMap[uid] = newpaths.length;
+					newpaths.push(state);
+				}
+
+				paths = newpaths;
+				
 				break;
 			case 'start':
 				if(id in pathMap) {
