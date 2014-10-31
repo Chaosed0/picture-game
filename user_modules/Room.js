@@ -106,7 +106,7 @@ function Room() {
 				//Re-start paths that were in-progress at time of clear
 				for(var uid in pathMap) {
 					var state = users[uid].getState();
-					var path = paths[pathMap[uid]];
+					var path = paths[pathMap[uid]].path;
 					state.path = [ path[path.length-1] ];
 					pathMap[uid] = newpaths.length;
 					newpaths.push(state);
@@ -136,7 +136,8 @@ function Room() {
 				break;
 			case 'stop':
 				if(id in pathMap) {
-					paths[pathMap[id]].path = simplify(paths[pathMap[id]].path, 1.0);
+					var pathId = pathMap[id];
+					paths[pathId].path = simplify(paths[pathId].path, 1.0);
 					delete pathMap[id];
 					break;
 				} else {
