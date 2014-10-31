@@ -1,5 +1,5 @@
 
-var ws = require('ws')
+var ws = require('ws');
 var express = require('express');
 var morgan = require('morgan');
 var RoomManager = require('./user_modules/RoomManager');
