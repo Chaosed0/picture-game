@@ -5,7 +5,7 @@ $(document).ready(function() {
 	var offline = false;
 
 	var brushManager = new BrushManager(canvas);
-	var comms = new ServerComms(server_address, brushManager);
+	var comms = new ServerComms(brushManager);
 	var localBrush = new LocalBrush(comms, canvas, brushManager);
 
 	var sizeCanvas = function() {
@@ -108,5 +108,23 @@ $(document).ready(function() {
 		$(this).addClass('clear');
 	}).click(function(event) {
 		confirm_dialog.dialog('open');
+	});
+
+	$('#connect_button').click(function() {
+		//BrushManager, not LocalBrush - don't want to clear the 
+		// server's canvas
+		brushManager.clearCanvas();
+
+		var user = localBrush.getProperties();
+		user.name = $('#name_input').val();
+
+		if(!comms.isConnected()) {
+			comms.connect(server_address, user, function() {
+				comms.joinRoom($('#room_input').val());
+			});
+		} else {
+			comms.leaveRoom();
+			comms.joinRoom($('#room_input').val());
+		}
 	});
 });

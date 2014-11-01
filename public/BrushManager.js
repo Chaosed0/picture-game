@@ -5,10 +5,16 @@ function BrushManager(canvas) {
 	var paths = [];
 
 	this.setSize = function(id, size) { brushes[id].setSize(size); };
+	this.getSize = function(id) { return brushes[id].getSize(); };
 	this.setColor = function(id, color) { brushes[id].setColor(color); };
+	this.getColor = function(id) { return brushes[id].getColor(); };
 	this.toggleBrush = function(id) { brushes[id].toggleBrush(); };
 	this.setBrush = function(id, isBrush) { brushes[id].setBrush(isBrush); };
 	this.isBrush = function(id) { return brushes[id].isBrush(); };
+
+	this.havePaths = function() {
+		return paths.length != 0;
+	}
 
 	this.clearCanvas = function() {
 		var context = canvas[0].getContext('2d');
@@ -24,6 +30,7 @@ function BrushManager(canvas) {
 		var brush = new Brush(canvas);
 		for(var i = 0; i < paths.length; i++) {
 			var path = paths[i].path;
+
 			brush.setColor(paths[i].color);
 			brush.setSize(paths[i].size);
 			brush.setBrush(paths[i].isBrush);

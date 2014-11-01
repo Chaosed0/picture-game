@@ -8,6 +8,14 @@ function LocalBrush(comms, canvas, brushManager) {
 	//init
 	brushManager.newBrush(id);
 
+	this.getProperties = function() {
+		return {
+			size: brushManager.getSize(id),
+			color: brushManager.getColor(id),
+			isBrush: brushManager.isBrush(id)
+		}
+	}
+
 	this.setSize = function(size) {
 		brushManager.setSize(id, size);
 		comms.setSize(size);

@@ -1,44 +1,6 @@
 
 var simplify = require('simplify-js');
-
-function User(conn) {
-	var name = '';
-	var color = { r: 0, g: 0, b: 0 };
-	var size = 5;
-	var isBrush = true;
-
-	this.getName = function() {
-		return name;
-	};
-
-	this.getState = function() {
-		return {
-			color: color,
-			size: size,
-			isBrush: isBrush,
-		}
-	};
-
-	this.send = function(data) {
-		conn.send(data);
-	};
-
-	this.setName = function(in_name) {
-		name = in_name;
-	};
-
-	this.setSize = function(in_size) {
-		size = in_size;
-	};
-
-	this.setColor = function(in_color) {
-		color = in_color;
-	};
-
-	this.toggleBrush = function() {
-		isBrush = !isBrush;
-	};
-}
+var User = require('./User');
 
 function Room() {
 	var users = {};
@@ -53,15 +15,18 @@ function Room() {
 		}
 	};
 
+	this.userInRoom = function(id) {
+		return id in users;
+	}
+
 	this.leaveUser = function(id) {
+		var user = users[id];
 		broadcast(JSON.stringify({id: id, m_type: 'leave'}), id);
 		delete users[id];
+		return user;
 	};
 
-	this.newUser = function(id, name, conn)  {
-		var user = new User(conn);
-		user.setName(name);
-
+	this.newUser = function(id, user)  {
 		//Tell people connected about the joiner
 		for(var oid in users) {
 			var obj = user.getState();
@@ -77,12 +42,12 @@ function Room() {
 			obj.name = users[oid].getName();
 			obj.m_type = 'join';
 			obj.id = oid;
-			conn.send(JSON.stringify(obj));
+			user.send(JSON.stringify(obj));
 		}
 
 		//Send all the paths
 		if(paths.length > 0) {
-			conn.send(JSON.stringify({ m_type: 'init_paths', paths: paths }));
+			user.send(JSON.stringify({ m_type: 'init_paths', paths: paths }));
 		}
 		
 		users[id] = user;
@@ -114,6 +79,9 @@ function Room() {
 
 				paths = newpaths;
 				
+				break;
+			case 'leave':
+				return 
 				break;
 			case 'start':
 				if(id in pathMap) {
@@ -148,7 +116,7 @@ function Room() {
 			default:
 				doBroadcast = false;
 				console.log('warning: got unknown message');
-				console.log(message);
+				console.log(obj);
 				break;
 		}
 

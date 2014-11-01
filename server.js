@@ -3,6 +3,7 @@ var ws = require('ws');
 var express = require('express');
 var morgan = require('morgan');
 var RoomManager = require('./user_modules/RoomManager');
+var User = require('./user_modules/User');
 
 //Express (webserver)
 var app = express();
@@ -24,29 +25,41 @@ wss.on('connection', function(ws) {
 	var id = nextId++;
 
 	//join lobby
-	lobbyUsers[id] = null;
+	lobbyUsers[id] = new User(ws);
 
 	ws.on('message', function(message) {
 		var obj = JSON.parse(message);
-		if(id in lobbyUsers) {
-			switch(obj.m_type) {
-				case 'join_room':
-					var name = lobbyUsers[id];
-					if(name == null) {
-						//Need to set a username
-					} else {
-						roomManager.newUser(id, name, obj.room_id, ws);
-						delete lobbyUsers[id];
-					}
-					break;
-				case 'name':
-					lobbyUsers[id] = obj.name;
-					break;
-				default:
-					break;
-			}
-		} else {
-			roomManager.handleMessage(id, obj);
+		switch(obj.m_type) {
+			case 'sync':
+				if(id in lobbyUsers) {
+					var user = lobbyUsers[id];
+					user.setName(obj.user.name);
+					user.setSize(obj.user.size);
+					user.setColor(obj.user.color);
+					user.setBrush(obj.user.isBrush);
+				}
+				break;
+			case 'join_room':
+				if(id in lobbyUsers) {
+					var user = lobbyUsers[id];
+					roomManager.newUser(id, user, obj.room_id);
+					delete lobbyUsers[id];
+				}
+				break;
+			case 'leave_room':
+				if(!(id in lobbyUsers)) {
+					var user = roomManager.leaveUser(id);
+					lobbyUsers[id] = user;
+				}
+				break;
+			case 'close':
+				if(id in lobbyUsers) {
+					ws.close();
+				}
+				break;
+			default:
+				roomManager.handleMessage(id, obj);
+				break;
 		}
 	});
 

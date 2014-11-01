@@ -3,10 +3,10 @@
 function Brush(canvas) {
 	var context = canvas[0].getContext('2d');
 	var color = { r: 0, g: 0, b: 0 };
-	var join = 'round';
-	var cap = 'round';
 	var size = 5;
 	var isBrush = true;
+	var join = 'round';
+	var cap = 'round';
 
 	var painting = false;
 	var lastPos = {x: 0, y: 0};
@@ -56,6 +56,23 @@ function Brush(canvas) {
 		return isBrush;
 	}
 
+	this.setColor = function(in_color) {
+		console.log(in_color);
+		color = in_color;
+	};
+
+	this.getColor = function() {
+		return color;
+	}
+
+	this.setSize = function(in_size) {
+		size = in_size;
+	};
+
+	this.getSize = function() {
+		return size;
+	}
+
 	this.endDraw = function() {
 		painting = false;
 		var obj = {
@@ -65,13 +82,5 @@ function Brush(canvas) {
 			isBrush: isBrush
 		}
 		return obj;
-	};
-
-	this.setColor = function(in_color) {
-		color = in_color;
-	};
-
-	this.setSize = function(in_size) {
-		size = in_size;
 	};
 }

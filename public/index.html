@@ -75,6 +75,8 @@
 		}
 
 		#sidebar {
+			display: flex;
+			flex-direction: column;
 			background-color: #DDDDDD;
 			width: 300px;
 			float: right;
@@ -90,6 +92,9 @@
 			margin: 10px 5px;
 			width: 40px;
 			height: 40px;
+		}
+
+		.flex_center {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -104,7 +109,7 @@
 			margin: auto;
 		}
 
-		.toolbar_filler {
+		.filler {
 			flex: 1;
 		}
 
@@ -146,18 +151,18 @@
 	<div class='container fill'>
 		<div class='container-row fill'>
 			<div class='fill' id='toolbar'>
-				<div class='control'>
+				<div class='control flex_center'>
 					<input type='text' id='colorpicker'/>
 				</div>
-				<div class='control' id='size_button_container'>
+				<div class='control flex_center' id='size_button_container'>
 					<div class='brush-circle' id='size_button'></div>
 				</div>
-				<div class='control' id='brush_eraser_container'>
+				<div class='control flex_center' id='brush_eraser_container'>
 					<div class='brush' id='brush_button'></div>
 				</div>
-				<div class='toolbar_filler'>
+				<div class='filler'>
 				</div>
-				<div class='control' id='clear_button_container'>
+				<div class='control flex_center' id='clear_button_container'>
 					<div class='clear' id = 'clear_button'></div>
 				</div>
 			</div>
@@ -165,7 +170,17 @@
 				<canvas id='thecanvas'/>
 			</div>
 			<div class='fill' id='sidebar'>
-				<p>nothing actually here</p>
+				<div class='filler'></div>
+				<div class='flex_center'>
+					<p>Name: </p><input type='name' id='name_input'/> </br>
+				</div>
+				<div class='flex_center'>
+					<p>Room: </p><input type='text' id='room_input'/> </br>
+				</div>
+				<div class='flex_center'>
+					<input type='button' id='connect_button' value='Connect'/>
+				</div>
+				<div class='filler'></div>
 			</div>
 		</div>
 	</div>

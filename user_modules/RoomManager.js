@@ -13,19 +13,19 @@ function RoomManager() {
 		return roomId in rooms;
 	};
 
-	this.newUser = function(id, name, roomId, conn) {
+	this.newUser = function(id, user, roomId) {
 		console.log('User ' + id + ' joined room ' + roomId);
 		if(!roomExists(roomId)) {
 			rooms[roomId] = new Room();
 		}
 		idMap[id] = roomId;
-		rooms[roomId].newUser(id, name, conn);
+		rooms[roomId].newUser(id, user);
 	};
 
 	this.leaveUser = function(id) {
 		var roomId = userToRoom(id);
 		console.log('User ' + id + ' left room ' + roomId);
-		rooms[roomId].leaveUser(id);
+		return rooms[roomId].leaveUser(id);
 	};
 
 	this.handleMessage = function(id, obj) {
