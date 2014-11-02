@@ -2,7 +2,7 @@
 var simplify = require('simplify-js');
 var User = require('./User');
 
-function Room() {
+function Room(name) {
 	var users = {};
 	var pathMap = {};
 	var paths = [];
@@ -45,10 +45,8 @@ function Room() {
 			user.send(JSON.stringify(obj));
 		}
 
-		//Send all the paths
-		if(paths.length > 0) {
-			user.send(JSON.stringify({ m_type: 'init_paths', paths: paths }));
-		}
+		//Send welcome message
+		user.send(JSON.stringify({ m_type: 'welcome', room: name, paths: paths }));
 		
 		users[id] = user;
 	};

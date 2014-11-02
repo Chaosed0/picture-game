@@ -145,6 +145,15 @@
 			background-position: -40px -80px;
 		}
 
+		#announcement {
+			position: absolute;
+			text-align: center;
+			width: 100%;
+			top: 200px;
+			pointer-events: none;
+			z-index: 1000;
+		}
+
 	</style>
 </head>
 <body>
@@ -191,6 +200,11 @@
 
 	<div id='slider_container'>
 		<div id='size_slider'></div>
+	</div>
+
+	<div id='announcement'>
+		<h1 id='announce_text'>
+		</h1>
 	</div>
 </body>
 </html>

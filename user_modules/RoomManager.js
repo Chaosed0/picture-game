@@ -16,7 +16,7 @@ function RoomManager() {
 	this.newUser = function(id, user, roomId) {
 		console.log('User ' + id + ' joined room ' + roomId);
 		if(!roomExists(roomId)) {
-			rooms[roomId] = new Room();
+			rooms[roomId] = new Room(roomId);
 		}
 		idMap[id] = roomId;
 		rooms[roomId].newUser(id, user);

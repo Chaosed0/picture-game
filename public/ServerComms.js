@@ -23,7 +23,7 @@ function ServerComms(drawManager) {
 		return connected;
 	}
 
-	this.connect = function(address, user, callback) {
+	this.connect = function(address, user, openCallback, joinCallback) {
 		ws = new WebSocket(address);
 
 		ws.onopen = function(anevent) {
@@ -93,16 +93,21 @@ function ServerComms(drawManager) {
 				});
 			}
 
-			callback();
+			openCallback();
 		};
 
 		ws.onmessage = function(message, flags) {
 			var data = message.data;
 			var obj = JSON && JSON.parse(data) || $.parseJSON(json);
+			console.log(obj);
 			switch (obj.m_type) {
-				case 'init_paths':
-					drawManager.initPaths(obj.paths);
-					drawManager.redraw();
+				case 'welcome':
+					//This counts as 'joined room'
+					joinCallback(obj.room);
+					if(obj.paths != undefined && obj.paths.length > 0) {
+						drawManager.initPaths(obj.paths);
+						drawManager.redraw();
+					}
 					break;
 				case 'clear':
 					drawManager.clearCanvas();
@@ -139,6 +144,10 @@ function ServerComms(drawManager) {
 					console.log(data);
 					break;
 			}
+		};
+
+		ws.onclose = function(closeEvent) {
+			connected = false;
 		};
 	}
 }

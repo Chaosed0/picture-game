@@ -2,7 +2,7 @@
 $(document).ready(function() {
 	var server_address = 'ws://127.0.0.1:8080/'
 	var canvas = $('#thecanvas');
-	var offline = false;
+	var announceTimeout = null;
 
 	var brushManager = new BrushManager(canvas);
 	var comms = new ServerComms(brushManager);
@@ -15,6 +15,23 @@ $(document).ready(function() {
 	}
 	$(window).load(sizeCanvas);
 	$(window).resize(sizeCanvas);
+
+	var announce = function(text, timeout) {
+		var defaultTimeout = 3000;
+		if(timeout == undefined) {
+			timeout = defaultTimeout;
+		}
+
+		if(announceTimeout != null) {
+			window.clearTimeout(announceTimeout);
+		}
+
+		$('#announce_text').text(text);
+
+		announceTimeout = window.setTimeout(function() {
+			$('#announce_text').text('');
+		}, timeout);
+	}
 
 	$('#colorpicker').spectrum({
 		color: '#000',
@@ -113,7 +130,6 @@ $(document).ready(function() {
 	$('#connect_button').click(function() {
 		//BrushManager, not LocalBrush - don't want to clear the 
 		// server's canvas
-		brushManager.clearCanvas();
 
 		var user = localBrush.getProperties();
 		user.name = $('#name_input').val();
@@ -121,8 +137,12 @@ $(document).ready(function() {
 		if(!comms.isConnected()) {
 			comms.connect(server_address, user, function() {
 				comms.joinRoom($('#room_input').val());
+			}, function(name) {
+				brushManager.clearCanvas();
+				announce('Joined room "' + name + '"');
 			});
 		} else {
+			brushManager.clearCanvas();
 			comms.leaveRoom();
 			comms.joinRoom($('#room_input').val());
 		}
