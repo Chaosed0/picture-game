@@ -46,6 +46,23 @@
 			height: 100%;
 		}
 
+		.flex-child {
+			flex: 1;
+		}
+
+		.flex-column {
+			display:flex;
+			flex-direction: column;
+		}
+
+		.center-text {
+			text-align: center;
+		}
+
+		#chat_box {
+			overflow: hidden;
+		}
+
 		#slider_container {
 			position: absolute;
 			left: 0;
@@ -61,22 +78,16 @@
 		}
 
 		#toolbar {
-			text-align: center;
 			background-color: #778899;
 			width: 50px;
 			float: left;
-			display: flex;
-			flex-direction: column;
 		}
 
 		#canvas_container {
-			flex: 1;
 			line-height: 0;
 		}
 
 		#sidebar {
-			display: flex;
-			flex-direction: column;
 			background-color: #DDDDDD;
 			width: 300px;
 			float: right;
@@ -96,7 +107,7 @@
 			height: 40px;
 		}
 
-		.flex_center {
+		.flex-center {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -111,8 +122,8 @@
 			margin: auto;
 		}
 
-		.filler {
-			flex: 1;
+		.hidden {
+			display: none;
 		}
 
 
@@ -149,7 +160,6 @@
 
 		#announcement {
 			position: absolute;
-			text-align: center;
 			width: 100%;
 			top: 200px;
 			pointer-events: none;
@@ -161,37 +171,71 @@
 <body>
 	<div class='container fill'>
 		<div class='container-row fill'>
-			<div class='fill' id='toolbar'>
-				<div class='control flex_center'>
+			<div class='fill flex-column' id='toolbar'>
+				<div class='control flex-center'>
 					<input type='text' id='colorpicker'/>
 				</div>
-				<div class='control flex_center' id='size_button_container'>
+				<div class='control flex-center' id='size_button_container'>
 					<div class='brush-circle' id='size_button'></div>
 				</div>
-				<div class='control flex_center' id='brush_eraser_container'>
+				<div class='control flex-center' id='brush_eraser_container'>
 					<div class='brush' id='brush_button'></div>
 				</div>
-				<div class='filler'>
+				<div class='flex-child'>
 				</div>
-				<div class='control flex_center' id='clear_button_container'>
+				<div class='control flex-center' id='clear_button_container'>
 					<div class='clear' id = 'clear_button'></div>
 				</div>
 			</div>
-			<div class='fill' id='canvas_container'>
+			<div class='fill flex-child' id='canvas_container'>
 				<canvas id='thecanvas'/>
 			</div>
 			<div class='fill' id='sidebar'>
-				<div class='filler'></div>
-				<div class='flex_center'>
-					<p>Name: </p><input type='name' id='name_input'/> </br>
+
+				<div id='connect' class='flex-column fill'>
+					<div class='flex-child'></div>
+					<div class='flex-center'>
+						<p>Name: </p><input type='name' id='name_input'/> </br>
+					</div>
+					<div class='flex-center'>
+						<p>Room: </p><input type='text' id='room_input'/> </br>
+					</div>
+					<div class='flex-center'>
+						<input type='button' id='connect_button' value='Connect'/>
+					</div>
+					<div class='flex-child'></div>
 				</div>
-				<div class='flex_center'>
-					<p>Room: </p><input type='text' id='room_input'/> </br>
+
+				<div id='loading' class='flex-column fill '>
+					<div class='flex-child'></div>
+					<p>Loading</p>
+					<div class='flex-child'></div>
 				</div>
-				<div class='flex_center'>
-					<input type='button' id='connect_button' value='Connect'/>
+
+				<div id='chat' class='flex-column fill'>
+					<div class='center-text'>
+						<p>Room title</p>
+						<hr/>
+					</div>
+					<div id='chat_box' class='flex-child'>
+					</div>
+					<div>
+						<hr/>
+						<input type='text' id='chat_input'/>
+						<input type='button' value='Users' id='users_button'/>
+						<input type='button' value='Leave' id='leave_button'/>
+						<input type='button' value='Chat' id='chat_button'/>
+					</div>
 				</div>
-				<div class='filler'></div>
+
+				<div id='user-list' class='hidden fill'>
+					<p>User list</p>
+				</div>
+
+				<div id='voting' class='hidden fill'>
+					<p>Voting</p>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -204,7 +248,7 @@
 		<div id='size_slider'></div>
 	</div>
 
-	<div id='announcement'>
+	<div id='announcement' class='center-text'>
 		<h1 id='announce_text'>
 		</h1>
 	</div>

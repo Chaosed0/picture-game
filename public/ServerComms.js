@@ -3,8 +3,9 @@
 function ServerComms(drawManager) {
 	var connected = false;
 	var ws = null;
-	var nullfunc = function() {};
+	var nameMap = {};
 	var self = this;
+	var nullfunc = function() {};
 
 	var send = function(obj) {
 		if(connected) {
@@ -17,10 +18,15 @@ function ServerComms(drawManager) {
 		this.setSize = this.startDraw =
 		this.endDraw = this.updateDraw =
 		this.clearCanvas = nullfunc;
+	var chatMessageCallback = nullfunc;
 
 
 	this.isConnected = function () {
 		return connected;
+	}
+
+	this.onChatMessage = function(func) {
+		chatMessageCallback = func;
 	}
 
 	this.connect = function(address, user, openCallback, joinCallback) {
@@ -93,16 +99,22 @@ function ServerComms(drawManager) {
 				});
 			}
 
+			self.sendMessage = function(message) {
+				send({
+					m_type: 'message',
+					message: message
+				});
+			}
+
 			openCallback();
 		};
 
 		ws.onmessage = function(message, flags) {
 			var data = message.data;
 			var obj = JSON && JSON.parse(data) || $.parseJSON(json);
-			console.log(obj);
 			switch (obj.m_type) {
 				case 'welcome':
-					//This counts as 'joined room'
+					nameMap[obj.id] = user.name;
 					joinCallback(obj.room);
 					if(obj.paths != undefined && obj.paths.length > 0) {
 						drawManager.initPaths(obj.paths);
@@ -126,9 +138,11 @@ function ServerComms(drawManager) {
 					if(obj.size != undefined) drawManager.setSize(obj.id, obj.size);
 					if(obj.color != undefined) drawManager.setColor(obj.id, obj.color);
 					if(obj.isBrush != undefined) drawManager.setBrush(obj.id, obj.isBrush);
+					nameMap[obj.id] = obj.name;
 					break;
 				case 'leave':
 					drawManager.destroyBrush(obj.id);
+					delete nameMap[obj.id];
 					break;
 				case 'start':
 					drawManager.startDraw(obj.id, obj.pos);
@@ -138,6 +152,9 @@ function ServerComms(drawManager) {
 					break;
 				case 'update':
 					drawManager.updateDraw(obj.id, obj.pos);
+					break;
+				case 'message':
+					chatMessageCallback(nameMap[obj.id], obj.message);
 					break;
 				default:
 					console.log('warning: unknown message from server');

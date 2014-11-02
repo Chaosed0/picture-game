@@ -33,6 +33,21 @@ $(document).ready(function() {
 		}, timeout);
 	}
 
+	var chatMessage = function(name, message) {
+		var maxMessages = 100;
+		var chatbox = $('#chat_box');
+		var text = name + ': ' + message;
+		chatbox.append('<p>' + text + '</p>');
+		/*if(chatbox.children().length > maxMessages) {
+			chatbox.find('p:first').remove();
+		}*/
+		chatbox.scrollTop(chatbox[0].scrollHeight);
+	}
+	comms.onChatMessage(chatMessage);
+
+	$('#loading').hide();
+	$('#chat').hide();
+
 	$('#colorpicker').spectrum({
 		color: '#000',
 		showButtons: false,
@@ -130,6 +145,8 @@ $(document).ready(function() {
 	$('#connect_button').click(function() {
 		//BrushManager, not LocalBrush - don't want to clear the 
 		// server's canvas
+		$('#connect').hide();
+		$('#loading').show();
 
 		var user = localBrush.getProperties();
 		user.name = $('#name_input').val();
@@ -138,6 +155,8 @@ $(document).ready(function() {
 			comms.connect(server_address, user, function() {
 				comms.joinRoom($('#room_input').val());
 			}, function(name) {
+				$('#loading').hide();
+				$('#chat').show();
 				brushManager.clearCanvas();
 				announce('Joined room "' + name + '"');
 			});
@@ -145,6 +164,16 @@ $(document).ready(function() {
 			brushManager.clearCanvas();
 			comms.leaveRoom();
 			comms.joinRoom($('#room_input').val());
+		}
+	});
+
+	var sendChat = function() {
+		comms.sendMessage($('#chat_input').val());
+	};
+	$('#chat_button').click(sendChat);
+	$('#chat_input').keyup(function(event) {
+		if(event.keyCode == 13) {
+			sendChat();
 		}
 	});
 });

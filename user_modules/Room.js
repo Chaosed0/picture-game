@@ -46,13 +46,14 @@ function Room(name) {
 		}
 
 		//Send welcome message
-		user.send(JSON.stringify({ m_type: 'welcome', room: name, paths: paths }));
+		user.send(JSON.stringify({ m_type: 'welcome', id: id, room: name, paths: paths }));
 		
 		users[id] = user;
 	};
 
 	this.handleMessage = function(id, obj) {
 		var doBroadcast = true;
+		var except = true;
 		switch(obj.m_type) {
 			case 'ch_size':
 				users[id].setSize(obj.size);
@@ -111,6 +112,10 @@ function Room(name) {
 					console.log('warning: \'stop\' received before \'start\'');
 				}
 				break;
+			case 'message':
+				//Just broadcast to everyone
+				except = false;
+				break;
 			default:
 				doBroadcast = false;
 				console.log('warning: got unknown message');
@@ -120,7 +125,11 @@ function Room(name) {
 
 		if(doBroadcast) {
 			obj.id = id;
-			broadcast(JSON.stringify(obj), id);
+			if(except) {
+				broadcast(JSON.stringify(obj), id);
+			} else {
+				broadcast(JSON.stringify(obj));
+			}
 		}
 	};
 }

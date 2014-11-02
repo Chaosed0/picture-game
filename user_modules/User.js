@@ -11,6 +11,7 @@ function User(conn) {
 
 	this.getState = function() {
 		return {
+			name: name,
 			color: color,
 			size: size,
 			isBrush: isBrush,
