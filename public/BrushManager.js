@@ -28,13 +28,15 @@ function BrushManager(canvas) {
 
 	this.redraw = function() {
 		var brush = new Brush(canvas);
+		console.log(paths);
 		for(var i = 0; i < paths.length; i++) {
 			var path = paths[i].path;
+			console.log(path);
 
 			brush.setColor(paths[i].color);
 			brush.setSize(paths[i].size);
 			brush.setBrush(paths[i].isBrush);
-			brush.startDraw(paths[0]);
+			brush.startDraw(path[0]);
 
 			for(var j = 1; j < path.length; j++) {
 				brush.updateDraw(path[j]);

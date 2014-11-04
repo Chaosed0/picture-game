@@ -57,7 +57,6 @@ function Brush(canvas) {
 	}
 
 	this.setColor = function(in_color) {
-		console.log(in_color);
 		color = in_color;
 	};
 

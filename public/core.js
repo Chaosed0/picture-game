@@ -69,8 +69,10 @@ $(document).ready(function() {
 	}
 
 	comms.on('welcome', function(obj) {
+		brushManager.clearCanvas();
 		usernames[obj.id] = usernames[-1];
 
+		console.log(obj);
 		if(obj.paths != undefined && obj.paths.length > 0) {
 			brushManager.initPaths(obj.paths);
 			brushManager.redraw();
@@ -81,7 +83,6 @@ $(document).ready(function() {
 
 		$('#loading').hide();
 		$('#chat').show();
-		brushManager.clearCanvas();
 		announce('Joined room "' + obj.room + '"');
 	}).on('clear', brushManager.clearCanvas
 	).on('toggle_brush', function(obj) {
@@ -238,7 +239,9 @@ $(document).ready(function() {
 	$('#leave_button').click(function() {
 		$('#chat').hide();
 		$('#connect').show();
-		room.leaveRoom();
+		comms.leaveRoom();
+		announce('Left room');
+		brushManager.clearCanvas();
 	});
 
 	comms.on('close', function(closeEvent) {
