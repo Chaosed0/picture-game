@@ -1,11 +1,12 @@
 
 //Handles communication with the server.
-function ServerComms(drawManager) {
+function ServerComms() {
 	var connected = false;
 	var ws = null;
 	var nameMap = {};
 	var self = this;
 	var nullfunc = function() {};
+	var callbacks = {};
 
 	var send = function(obj) {
 		if(connected) {
@@ -18,8 +19,11 @@ function ServerComms(drawManager) {
 		this.setSize = this.startDraw =
 		this.endDraw = this.updateDraw =
 		this.clearCanvas = nullfunc;
-	var chatMessageCallback = nullfunc;
 
+	this.on = function(event, func) {
+		callbacks[event] = func;
+		return self;
+	}
 
 	this.isConnected = function () {
 		return connected;
@@ -29,7 +33,11 @@ function ServerComms(drawManager) {
 		chatMessageCallback = func;
 	}
 
-	this.connect = function(address, user, openCallback, joinCallback) {
+	this.getName = function(id) {
+		return nameMap[id];
+	}
+
+	this.connect = function(address, user, openCallback) {
 		ws = new WebSocket(address);
 
 		ws.onopen = function(anevent) {
@@ -112,59 +120,16 @@ function ServerComms(drawManager) {
 		ws.onmessage = function(message, flags) {
 			var data = message.data;
 			var obj = JSON && JSON.parse(data) || $.parseJSON(json);
-			switch (obj.m_type) {
-				case 'welcome':
-					nameMap[obj.id] = user.name;
-					joinCallback(obj.room);
-					if(obj.paths != undefined && obj.paths.length > 0) {
-						drawManager.initPaths(obj.paths);
-						drawManager.redraw();
-					}
-					break;
-				case 'clear':
-					drawManager.clearCanvas();
-					break;
-				case 'toggle_brush':
-					drawManager.toggleBrush(obj.id);
-					break;
-				case 'ch_color':
-					drawManager.setColor(obj.id, obj.color);
-					break;
-				case 'ch_size':
-					drawManager.setSize(obj.id, obj.size);
-					break;
-				case 'join':
-					drawManager.newBrush(obj.id);
-					if(obj.size != undefined) drawManager.setSize(obj.id, obj.size);
-					if(obj.color != undefined) drawManager.setColor(obj.id, obj.color);
-					if(obj.isBrush != undefined) drawManager.setBrush(obj.id, obj.isBrush);
-					nameMap[obj.id] = obj.name;
-					break;
-				case 'leave':
-					drawManager.destroyBrush(obj.id);
-					delete nameMap[obj.id];
-					break;
-				case 'start':
-					drawManager.startDraw(obj.id, obj.pos);
-					break;
-				case 'stop':
-					drawManager.endDraw(obj.id);
-					break;
-				case 'update':
-					drawManager.updateDraw(obj.id, obj.pos);
-					break;
-				case 'message':
-					chatMessageCallback(nameMap[obj.id], obj.message);
-					break;
-				default:
-					console.log('warning: unknown message from server');
-					console.log(data);
-					break;
+			if(obj.m_type in callbacks) {
+				callbacks[obj.m_type](obj);
 			}
 		};
 
 		ws.onclose = function(closeEvent) {
 			connected = false;
+			if('close' in callbacks) {
+				callbacks['close'](closeEvent);
+			}
 		};
 	}
 }

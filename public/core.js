@@ -3,9 +3,10 @@ $(document).ready(function() {
 	var server_address = 'ws://127.0.0.1:8080/'
 	var canvas = $('#thecanvas');
 	var announceTimeout = null;
+	var usernames = {};
 
 	var brushManager = new BrushManager(canvas);
-	var comms = new ServerComms(brushManager);
+	var comms = new ServerComms();
 	var localBrush = new LocalBrush(comms, canvas, brushManager);
 
 	var sizeCanvas = function() {
@@ -33,17 +34,78 @@ $(document).ready(function() {
 		}, timeout);
 	}
 
-	var chatMessage = function(name, message) {
+	var chatMessage = function(message, name) {
 		var maxMessages = 100;
 		var chatbox = $('#chat_box');
-		var text = name + ': ' + message;
+		var text = '';
+
+		if(name != undefined) {
+			text = name + ': ' + message;
+		} else {
+			text = '<em>' + message + '</em>';
+		}
+
 		chatbox.append('<p>' + text + '</p>');
-		/*if(chatbox.children().length > maxMessages) {
+		if(chatbox.children().length > maxMessages) {
 			chatbox.find('p:first').remove();
-		}*/
+		}
 		chatbox.scrollTop(chatbox[0].scrollHeight);
 	}
-	comms.onChatMessage(chatMessage);
+
+	var addUser = function(id, obj) {
+		brushManager.newBrush(id);
+		if(obj.size != undefined) brushManager.setSize(id, obj.size);
+		if(obj.color != undefined) brushManager.setColor(id, obj.color);
+		if(obj.isBrush != undefined) brushManager.setBrush(id, obj.isBrush);
+		usernames[id] = obj.name;
+	};
+
+	var getName = function(id) {
+		if(id in usernames) {
+			return usernames[id];
+		} else {
+			return '??';
+		}
+	}
+
+	comms.on('welcome', function(obj) {
+		usernames[obj.id] = usernames[-1];
+
+		if(obj.paths != undefined && obj.paths.length > 0) {
+			brushManager.initPaths(obj.paths);
+			brushManager.redraw();
+		}
+		for(id in obj.users) {
+			addUser(id, obj.users[id]);
+		}
+
+		$('#loading').hide();
+		$('#chat').show();
+		brushManager.clearCanvas();
+		announce('Joined room "' + obj.room + '"');
+	}).on('clear', brushManager.clearCanvas
+	).on('toggle_brush', function(obj) {
+		brushManager.toggleBrush(obj.id);
+	}).on('ch_color', function(obj) {
+		brushManager.setColor(obj.id, obj.color);
+	}).on('ch_size', function(obj) {
+		brushManager.setColor(obj.id, obj.size);
+	}).on('join', function(obj) {
+		addUser(obj.id, obj);
+		chatMessage(getName(obj.id) + ' joined the room');
+	}).on('leave', function(obj) {
+		brushManager.destroyBrush(obj.id);
+		chatMessage(getName(obj.id) + ' left the room');
+		delete usernames[id];
+	}).on('message', function(obj) {
+		chatMessage(obj.message, getName(obj.id));
+	}).on('start', function(obj) {
+		brushManager.startDraw(obj.id, obj.pos);
+	}).on('stop', function(obj) {
+		brushManager.endDraw(obj.id);
+	}).on('update', function(obj) {
+		brushManager.updateDraw(obj.id, obj.pos);
+	});
 
 	$('#loading').hide();
 	$('#chat').hide();
@@ -150,15 +212,11 @@ $(document).ready(function() {
 
 		var user = localBrush.getProperties();
 		user.name = $('#name_input').val();
+		usernames[-1] = user.name;
 
 		if(!comms.isConnected()) {
 			comms.connect(server_address, user, function() {
 				comms.joinRoom($('#room_input').val());
-			}, function(name) {
-				$('#loading').hide();
-				$('#chat').show();
-				brushManager.clearCanvas();
-				announce('Joined room "' + name + '"');
 			});
 		} else {
 			brushManager.clearCanvas();
@@ -175,5 +233,17 @@ $(document).ready(function() {
 		if(event.keyCode == 13) {
 			sendChat();
 		}
+	});
+
+	$('#leave_button').click(function() {
+		$('#chat').hide();
+		$('#connect').show();
+		room.leaveRoom();
+	});
+
+	comms.on('close', function(closeEvent) {
+		announce('Connection closed');
+		$('#chat').hide();
+		$('#connect').show();
 	});
 });

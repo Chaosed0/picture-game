@@ -27,26 +27,29 @@ function Room(name) {
 	};
 
 	this.newUser = function(id, user)  {
-		//Tell people connected about the joiner
+		//Tell people already connected about the joiner
 		for(var oid in users) {
 			var obj = user.getState();
-			obj.name = user.getName();
 			obj.m_type = 'join';
 			obj.id = id;
 			users[oid].send(JSON.stringify(obj));
 		}
 
+		var welcome = {
+			m_type: 'welcome',
+			id: id,
+			room: name,
+			paths: paths,
+			users: {}
+		}
+
 		//Tell joiner about the people already connected
 		for(var oid in users) {
-			var obj = users[oid].getState();
-			obj.name = users[oid].getName();
-			obj.m_type = 'join';
-			obj.id = oid;
-			user.send(JSON.stringify(obj));
+			welcome.users[oid] = users[oid].getState();
 		}
 
 		//Send welcome message
-		user.send(JSON.stringify({ m_type: 'welcome', id: id, room: name, paths: paths }));
+		user.send(JSON.stringify(welcome));
 		
 		users[id] = user;
 	};
