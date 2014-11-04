@@ -245,7 +245,7 @@ $(document).ready(function() {
 	});
 
 	comms.on('close', function(closeEvent) {
-		announce('Connection closed');
+		announce('Lost connection with server');
 		$('#chat').hide();
 		$('#connect').show();
 	});
