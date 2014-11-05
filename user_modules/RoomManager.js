@@ -5,17 +5,25 @@ function RoomManager() {
 	var rooms = {};
 	var idMap = {};
 
-	var userToRoom = function(id) {
-		return idMap[id];
-	};
-	
-	var roomExists = function(roomId) {
+	this.roomExists = function(roomId) {
 		return roomId in rooms;
 	};
 
+	this.userToRoom = function(id) {
+		return idMap[id];
+	};
+	
+	this.getRoomInfo = function() {
+		var info = {};
+		for(roomId in rooms) {
+			info[roomId] = rooms[roomId].getRoomInfo(false);
+		}
+		return info;
+	}
+
 	this.newUser = function(id, user, roomId) {
 		console.log('User ' + id + ' joined room ' + roomId);
-		if(!roomExists(roomId)) {
+		if(!this.roomExists(roomId)) {
 			rooms[roomId] = new Room(roomId);
 		}
 		idMap[id] = roomId;
@@ -23,14 +31,21 @@ function RoomManager() {
 	};
 
 	this.leaveUser = function(id) {
-		var roomId = userToRoom(id);
-		console.log('User ' + id + ' left room ' + roomId);
-		return rooms[roomId].leaveUser(id);
+		var roomId = this.userToRoom(id);
+		if(roomId != undefined) {
+			console.log('User ' + id + ' left room ' + roomId);
+			return rooms[roomId].leaveUser(id);
+		} else {
+			return null;
+		}
 	};
 
 	this.handleMessage = function(id, obj) {
-		var roomId = userToRoom(id);
-		rooms[roomId].handleMessage(id, obj);
+		var roomId = this.userToRoom(id);
+		if(roomId != undefined) {
+			rooms[roomId].handleMessage(id, obj);
+		}
+		//User's trying to draw in the lobby, just ignore it
 	};
 }
 

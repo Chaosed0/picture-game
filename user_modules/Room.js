@@ -6,6 +6,7 @@ function Room(name) {
 	var users = {};
 	var pathMap = {};
 	var paths = [];
+	var num_users = 0;
 
 	var broadcast = function(data, except) {
 		for(var id in users) {
@@ -13,6 +14,22 @@ function Room(name) {
 				users[id].send(data);
 			}
 		}
+	};
+
+	this.getRoomInfo = function(full) {
+		var info = { name: name }
+		if(full) {
+			info.users = {};
+			for(id in users) {
+				info.users[id] = {
+					name: users[id].getName(),
+					score: 0
+				};
+			}
+		} else {
+			info.num_users = num_users;
+		}
+		return info;
 	};
 
 	this.userInRoom = function(id) {
@@ -23,6 +40,7 @@ function Room(name) {
 		var user = users[id];
 		broadcast(JSON.stringify({id: id, m_type: 'leave'}), id);
 		delete users[id];
+		num_users--;
 		return user;
 	};
 
@@ -52,6 +70,7 @@ function Room(name) {
 		user.send(JSON.stringify(welcome));
 		
 		users[id] = user;
+		num_users++;
 	};
 
 	this.handleMessage = function(id, obj) {

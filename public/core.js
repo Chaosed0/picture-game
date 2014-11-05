@@ -5,6 +5,8 @@ $(document).ready(function() {
 	var announceTimeout = null;
 	var usernames = {};
 
+	var roomList = new RoomList();
+
 	var brushManager = new BrushManager(canvas);
 	var comms = new ServerComms();
 	var localBrush = new LocalBrush(comms, canvas, brushManager);
@@ -16,6 +18,11 @@ $(document).ready(function() {
 	}
 	$(window).load(sizeCanvas);
 	$(window).resize(sizeCanvas);
+
+	//Programmatically hide these; otherwise, jquery has no idea
+	// what to set display: back to
+	$('#loading').hide();
+	$('#chat').hide();
 
 	var announce = function(text, timeout) {
 		var defaultTimeout = 3000;
@@ -52,6 +59,11 @@ $(document).ready(function() {
 		chatbox.scrollTop(chatbox[0].scrollHeight);
 	}
 
+	var clearChat = function() {
+		var chatbox = $('#chat_box');
+		chatbox.empty();
+	}
+
 	var addUser = function(id, obj) {
 		brushManager.newBrush(id);
 		if(obj.size != undefined) brushManager.setSize(id, obj.size);
@@ -68,11 +80,42 @@ $(document).ready(function() {
 		}
 	}
 
-	comms.on('welcome', function(obj) {
-		brushManager.clearCanvas();
-		usernames[obj.id] = usernames[-1];
+	var reloadRooms = function() {
+		var roomsBox = $('#rooms_box');
+		var rooms = roomList.getRooms();
+		roomsBox.empty();
+		for(var roomId in rooms) {
+			var room = rooms[roomId];
+			var roomView = $('<p>' + roomId + ' (' + room.num_users + ')</p>');
+			roomsBox.append(roomView);
+		}
+	}
 
+	comms.on('lobby_welcome', function(obj) {
+		usernames[obj.id] = obj.name;
+		roomList.init(obj.rooms);
+		reloadRooms();
+		$('#connect').hide();
+		$('#lobby').show();
+	}).on('lobby_sync', function(obj) {
+		roomList.init(obj.rooms);
+		reloadRooms();
+		$('#chat').hide();
+		$('#lobby').show();
+	}).on('u2room', function(obj) {
+		roomList.addUser(obj.room_id);
+		reloadRooms();
+	}).on('u2lobby', function(obj) {
+		roomList.removeUser(obj.room_id);
+		reloadRooms();
+	}).on('new_room', function(obj) {
 		console.log(obj);
+		roomList.addRoom(obj.room_id);
+		reloadRooms();
+	}).on('welcome', function(obj) {
+		clearChat();
+		brushManager.clearCanvas();
+
 		if(obj.paths != undefined && obj.paths.length > 0) {
 			brushManager.initPaths(obj.paths);
 			brushManager.redraw();
@@ -81,7 +124,7 @@ $(document).ready(function() {
 			addUser(id, obj.users[id]);
 		}
 
-		$('#loading').hide();
+		$('#lobby').hide();
 		$('#chat').show();
 		announce('Joined room "' + obj.room + '"');
 	}).on('clear', brushManager.clearCanvas
@@ -108,9 +151,6 @@ $(document).ready(function() {
 		brushManager.updateDraw(obj.id, obj.pos);
 	});
 
-	$('#loading').hide();
-	$('#chat').hide();
-
 	$('#colorpicker').spectrum({
 		color: '#000',
 		showButtons: false,
@@ -132,22 +172,6 @@ $(document).ready(function() {
 		step: 1,
 		value: 5
 	});
-
-	var confirm_dialog = $('#clear_canvas_dialog')
-	confirm_dialog.dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			"Clear": function() {
-				localBrush.clearCanvas();
-				$(this).dialog('close');
-			},
-			Cancel: function() {
-				$(this).dialog('close');
-			}
-		}
-	})
 
 	size_slider.on('slidestop', function(event, ui) {
 		localBrush.setSize(ui.value);
@@ -205,25 +229,39 @@ $(document).ready(function() {
 		confirm_dialog.dialog('open');
 	});
 
-	$('#connect_button').click(function() {
-		//BrushManager, not LocalBrush - don't want to clear the 
-		// server's canvas
-		$('#connect').hide();
-		$('#loading').show();
+	var confirm_dialog = $('#clear_canvas_dialog')
+	confirm_dialog.dialog({
+		resizable: false,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			"Clear": function() {
+				localBrush.clearCanvas();
+				$(this).dialog('close');
+			},
+			Cancel: function() {
+				$(this).dialog('close');
+			}
+		}
+	})
 
+
+	$('#connect_button').click(function() {
 		var user = localBrush.getProperties();
 		user.name = $('#name_input').val();
 		usernames[-1] = user.name;
 
 		if(!comms.isConnected()) {
 			comms.connect(server_address, user, function() {
-				comms.joinRoom($('#room_input').val());
+				announce('Connected to server');
 			});
 		} else {
-			brushManager.clearCanvas();
-			comms.leaveRoom();
-			comms.joinRoom($('#room_input').val());
+			annnounce('You can\'t connect while already connected!');
 		}
+	});
+
+	$('#room_button').click(function() {
+		comms.joinRoom($('#room_input').val());
 	});
 
 	var sendChat = function() {
@@ -237,8 +275,6 @@ $(document).ready(function() {
 	});
 
 	$('#leave_button').click(function() {
-		$('#chat').hide();
-		$('#connect').show();
 		comms.leaveRoom();
 		announce('Left room');
 		brushManager.clearCanvas();
@@ -247,6 +283,7 @@ $(document).ready(function() {
 	comms.on('close', function(closeEvent) {
 		announce('Lost connection with server');
 		$('#chat').hide();
+		$('#lobby').hide();
 		$('#connect').show();
 	});
 });

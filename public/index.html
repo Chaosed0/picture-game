@@ -21,6 +21,7 @@
 	<script type="text/javascript" src="LocalBrush.js"></script>
 	<script type="text/javascript" src="ServerComms.js"></script>
 	<script type="text/javascript" src="NullComms.js"></script>
+	<script type="text/javascript" src="RoomList.js"></script>
 	<script type="text/javascript" src="core.js"></script>
 
 	<style>
@@ -101,6 +102,10 @@
 			height: 100%;
 		}
 
+		#rooms_box {
+			overflow: scroll;
+		}
+
 		.control {
 			margin: 10px 5px;
 			width: 40px;
@@ -118,7 +123,6 @@
 			width: 40px;
 			height: 40px;
 			border-radius: 50%;
-			/*border: 1px solid #EEE;*/
 			margin: auto;
 		}
 
@@ -194,16 +198,24 @@
 
 				<div id='connect' class='flex-column fill'>
 					<div class='flex-child'></div>
-					<div class='flex-center'>
-						<p>Name: </p><input type='name' id='name_input'/> </br>
-					</div>
-					<div class='flex-center'>
-						<p>Room: </p><input type='text' id='room_input'/> </br>
-					</div>
-					<div class='flex-center'>
-						<input type='button' id='connect_button' value='Connect'/>
-					</div>
+					<p class='flex-center'>Connect as:</p>
+					<input type='name' class='flex-center' id='name_input'/> </br>
+					<input type='button' class='flex-center' id='connect_button' value='Connect'/>
 					<div class='flex-child'></div>
+				</div>
+
+				<div id='lobby' class='flex-column fill'>
+					<div class='center-text'>
+						<p>Rooms</p>
+						<hr/>
+					</div>
+					<div id='rooms_box' class='flex-child'>
+					</div>
+					<div>
+						<hr/>
+						<input type='text' id='room_input'/>
+						<input type='button' value='Join' id='room_button'/>
+					</div>
 				</div>
 
 				<div id='loading' class='flex-column fill '>
