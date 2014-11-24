@@ -133,7 +133,7 @@ $(document).ready(function() {
 	}).on('ch_color', function(obj) {
 		brushManager.setColor(obj.id, obj.color);
 	}).on('ch_size', function(obj) {
-		brushManager.setColor(obj.id, obj.size);
+		brushManager.setSize(obj.id, obj.size);
 	}).on('join', function(obj) {
 		addUser(obj.id, obj);
 		chatMessage(getName(obj.id) + ' joined the room');
